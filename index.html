@@ -1,10 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>BitMind</title>
+    <meta
+      name="description"
+      content="Your bridge to rewarding computational contributions. Connect effortlessly with platforms like Bittensor, turning your computing tasks into revenue."
+    />
+    <meta
+      name="keywords"
+      content="ai, bittensor, machine learning, neural networks, bitmind"
+    />
+    <meta property="og:title" content="BitMind" />
+    <meta
+      property="og:description"
+      content="Your bridge to rewarding
+    computational contributions. Connect effortlessly with platforms like
+    Bittensor, turning your computing tasks into revenue."
+    />
+    <meta property="og:image" content="/social.png" />
+    <script>
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

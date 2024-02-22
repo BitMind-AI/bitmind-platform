@@ -1,35 +1,108 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+
+import { supabase } from "./lib/supabase";
+import { capitalizeFirstLetter } from "./utils/helpers";
+
+import { SupabaseProvider } from "./providers/SupabaseProvider";
+import { NotificationsProvider } from "./providers/NotificationsProvider";
+
+import Home from "./pages/Home";
+import Account from "./pages/Account";
+import SignIn from "./pages/auth/SignIn";
+import Error from "./pages/Error";
+import NotFound from "./pages/NotFound";
+
+import Terms from "./pages/legal/Terms";
+import Privacy from "./pages/legal/Privacy";
+import Support from "./pages/Support";
+
+import AppLayout from "./layouts/AppLayout";
+import Loader from "./components/Loader";
+import Notifications from "./components/Notifications";
+import { Session } from "@supabase/supabase-js";
+
+export type Snippet = {
+  id: string;
+  title: string;
+  code: string;
+  packages: string[];
+  user_id: string;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(true);
+  const [session, setSession] = useState<Session | null>(null);
+  const [theme, setTheme] = useState(localStorage.theme || "light");
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
+      setSession(session);
+      setLoading(false);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!["/", "/embed"].includes(pathname)) {
+      const routeTitles = {
+        signin: "Sign In",
+        terms: "Terms of Service",
+        privacy: "Privacy Policy",
+      } as { [key: string]: string };
+      const routeName = pathname.split("/")[1];
+      const title = routeTitles[routeName] || capitalizeFirstLetter(routeName);
+      document.title = `BitMind | ${title}`;
+    } else {
+      document.title = `BitMind`;
+    }
+  }, [pathname]);
+
+  const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    const location = useLocation();
+
+    if (!session?.user) {
+      return <Navigate to="/signin" state={{ from: location }} replace />;
+    }
+
+    return children;
+  };
+
+  if (loading) return <Loader />;
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <SupabaseProvider session={session}>
+      <NotificationsProvider>
+        <>
+          <div className="h-full">
+            <Routes>
+              <Route element={<AppLayout theme={theme} setTheme={setTheme} />}>
+                <Route path="/" element={<Home theme={theme} />} />
+                <Route
+                  path="account"
+                  element={
+                    <ProtectedRoute>
+                      <Account />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="terms" element={<Terms />} />
+                <Route path="privacy" element={<Privacy />} />
+                <Route path="support" element={<Support />} />
+              </Route>
+              <Route path="signin" element={<SignIn />} />
+              <Route path="error" element={<Error />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
+          <Notifications />
+        </>
+      </NotificationsProvider>
+    </SupabaseProvider>
+  );
 }
 
-export default App
+export default App;
