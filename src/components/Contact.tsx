@@ -112,7 +112,6 @@ export default function Contact() {
                 id="reason"
                 name="reason[]"
                 className="block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
-                placeholder="Reason"
                 value={form.reason}
                 onChange={handleChange}
                 required
