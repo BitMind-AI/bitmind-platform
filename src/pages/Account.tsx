@@ -18,7 +18,7 @@ import Dialog from "../components/Dialog";
 import clsx from "clsx";
 import DialogEmpty from "../components/DialogEmpty";
 
-function Account() {
+export default function Account() {
   const [snippetsLoading, setSnippetsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [snippets, setSnippets] = useState<any[]>([]);
@@ -459,5 +459,3 @@ function Account() {
     </>
   );
 }
-
-export default Account;

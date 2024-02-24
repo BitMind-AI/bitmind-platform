@@ -7,9 +7,16 @@ import { capitalizeFirstLetter } from "./utils/helpers";
 import { SupabaseProvider } from "./providers/SupabaseProvider";
 import { NotificationsProvider } from "./providers/NotificationsProvider";
 
-import Home from "./pages/Home";
+import Home from "./pages/app/Home";
+import Compute from "./pages/app/Compute";
+import Template from "./pages/app/Template";
+import Editor from "./pages/app/Editor";
 import Account from "./pages/Account";
+
 import SignIn from "./pages/auth/SignIn";
+import Register from "./pages/auth/Register";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+
 import Error from "./pages/Error";
 import NotFound from "./pages/NotFound";
 
@@ -50,6 +57,7 @@ function App() {
     if (!["/", "/embed"].includes(pathname)) {
       const routeTitles = {
         signin: "Sign In",
+        "forgot-password": "Forgot Password",
         terms: "Terms of Service",
         privacy: "Privacy Policy",
       } as { [key: string]: string };
@@ -80,7 +88,38 @@ function App() {
           <div className="h-full">
             <Routes>
               <Route element={<AppLayout theme={theme} setTheme={setTheme} />}>
-                <Route path="/" element={<Home theme={theme} />} />
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute>
+                      <Home />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="compute"
+                  element={
+                    <ProtectedRoute>
+                      <Compute />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="template"
+                  element={
+                    <ProtectedRoute>
+                      <Template />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="editor"
+                  element={
+                    <ProtectedRoute>
+                      <Editor theme={theme} />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route
                   path="account"
                   element={
@@ -94,6 +133,8 @@ function App() {
                 <Route path="support" element={<Support />} />
               </Route>
               <Route path="signin" element={<SignIn />} />
+              <Route path="register" element={<Register />} />
+              <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="error" element={<Error />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -20,7 +20,7 @@ export default function Header({
   theme: string;
   setTheme: (theme: string) => void;
 }) {
-  const { user, profile } = useSupabase();
+  const { profile } = useSupabase();
 
   const handleSignOut = async () => {
     try {
@@ -76,54 +76,34 @@ export default function Header({
                 leaveTo="transform opacity-0 scale-95"
               >
                 <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  {user ? (
-                    <>
-                      {userNavigation.map((item) => (
-                        <Menu.Item key={item.name}>
-                          {({ active }) => (
-                            <Link
-                              to={item.href}
-                              className={clsx(
-                                "block px-4 py-2 text-sm text-gray-700",
-                                active && "bg-gray-100"
-                              )}
-                            >
-                              {item.name}
-                            </Link>
+                  {userNavigation.map((item) => (
+                    <Menu.Item key={item.name}>
+                      {({ active }) => (
+                        <Link
+                          to={item.href}
+                          className={clsx(
+                            "block px-4 py-2 text-sm text-gray-700",
+                            active && "bg-gray-100"
                           )}
-                        </Menu.Item>
-                      ))}
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            className={clsx(
-                              "block w-full px-4 py-2 text-left text-sm text-red-700",
-                              active && "bg-gray-100"
-                            )}
-                            onClick={handleSignOut}
-                          >
-                            Sign out
-                          </button>
+                        >
+                          {item.name}
+                        </Link>
+                      )}
+                    </Menu.Item>
+                  ))}
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        className={clsx(
+                          "block w-full px-4 py-2 text-left text-sm text-red-700",
+                          active && "bg-gray-100"
                         )}
-                      </Menu.Item>
-                    </>
-                  ) : (
-                    <>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            to="/signin"
-                            className={clsx(
-                              "block px-4 py-2 text-sm text-gray-700",
-                              active && "bg-gray-100"
-                            )}
-                          >
-                            Sign in / Sign up
-                          </Link>
-                        )}
-                      </Menu.Item>
-                    </>
-                  )}
+                        onClick={handleSignOut}
+                      >
+                        Sign out
+                      </button>
+                    )}
+                  </Menu.Item>
                 </Menu.Items>
               </Transition>
             </Menu>

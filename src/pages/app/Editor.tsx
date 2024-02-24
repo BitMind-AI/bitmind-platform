@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
-import useNotifications from "../hooks/useNotifications";
+import { supabase } from "../../lib/supabase";
+import useNotifications from "../../hooks/useNotifications";
 
 import { useSearchParams } from "react-router-dom";
-import Loader from "../components/Loader";
-import Environment from "../components/Environment";
-import { Snippet } from "../App";
+import Loader from "../../components/Loader";
+import Environment from "../../components/Environment";
+import { Snippet } from "../../App";
 
-function Home({ theme }: { theme: string }) {
+export default function Editor({ theme }: { theme: string }) {
   const [snippetLoading, setSnippetLoading] = useState(false);
   const [editSnippet, setEditSnippet] = useState<Snippet>();
 
@@ -64,5 +64,3 @@ function Home({ theme }: { theme: string }) {
 
   return <Environment theme={theme} snippet={editSnippet} />;
 }
-
-export default Home;
