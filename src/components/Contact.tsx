@@ -81,7 +81,7 @@ export default function Contact() {
                 name="name"
                 id="name"
                 autoComplete="name"
-                className="block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                className="block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="Full name"
                 value={form.name}
                 onChange={handleChange}
@@ -97,7 +97,7 @@ export default function Contact() {
                 name="email"
                 type="email"
                 autoComplete="email"
-                className="block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                className="block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="Email"
                 value={form.email}
                 onChange={handleChange}
@@ -111,14 +111,14 @@ export default function Contact() {
               <select
                 id="reason"
                 name="reason[]"
-                className="block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                className="block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 value={form.reason}
                 onChange={handleChange}
                 required
               >
                 <option value="general">General enquiry</option>
                 <option value="support">Support request</option>
-                <option value="refund">Request a refund</option>
+                <option value="feedback">Feedback</option>
               </select>
             </div>
             <div>
@@ -129,7 +129,7 @@ export default function Contact() {
                 id="message"
                 name="message"
                 rows={4}
-                className="block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                className="block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="Message"
                 value={form.message}
                 onChange={handleChange}
@@ -139,7 +139,7 @@ export default function Contact() {
             <div>
               <button
                 type="submit"
-                className="inline-flex justify-center rounded-md border border-transparent bg-emerald-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 Submit
               </button>

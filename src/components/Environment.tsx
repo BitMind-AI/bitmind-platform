@@ -12,9 +12,15 @@ import DialogEmpty from "./DialogEmpty";
 import { PlayIcon, StopIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 
-const startCode = `# Welcome to BitMind Platform!`;
-
-function Environment({ theme, snippet }: { theme: string; snippet?: Snippet }) {
+function Environment({
+  theme,
+  snippet,
+  startCode = `print("Hello, world!")`,
+}: {
+  theme: string;
+  snippet?: Snippet;
+  startCode?: string;
+}) {
   const savedInput = localStorage.getItem("input");
 
   const [input, setInput] = useState(snippet?.code || savedInput || startCode);
@@ -152,7 +158,7 @@ function Environment({ theme, snippet }: { theme: string; snippet?: Snippet }) {
           throw error;
         }
         if (data) {
-          navigate(`/?edit=${data.id}`);
+          navigate(`/editor/?edit=${data.id}`);
         }
       }
       addMessage({
@@ -191,7 +197,7 @@ function Environment({ theme, snippet }: { theme: string; snippet?: Snippet }) {
             </div>
             <div className="flex gap-x-2">
               <button
-                className="rounded-md bg-emerald-50 px-2.5 py-1.5 text-sm font-semibold text-emerald-700 shadow-sm ring-1 ring-inset ring-emerald-600/20 hover:bg-emerald-100"
+                className="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-700 shadow-sm ring-1 ring-inset ring-indigo-600/20 hover:bg-indigo-100"
                 onClick={() => {
                   if (!snippetName) {
                     setSnippetName("Untitled");
@@ -204,7 +210,7 @@ function Environment({ theme, snippet }: { theme: string; snippet?: Snippet }) {
               {!isRunning ? (
                 <button
                   className={clsx(
-                    "inline-flex items-center gap-x-1.5 rounded-md bg-emerald-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600",
+                    "inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
                     isLoading && "cursor-not-allowed opacity-50"
                   )}
                   onClick={run}
@@ -215,7 +221,7 @@ function Environment({ theme, snippet }: { theme: string; snippet?: Snippet }) {
                 </button>
               ) : (
                 <button
-                  className="inline-flex items-center gap-x-1.5 rounded-md bg-emerald-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                  className="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   onClick={stop}
                 >
                   <StopIcon className="h-4 w-4" />
@@ -236,14 +242,14 @@ function Environment({ theme, snippet }: { theme: string; snippet?: Snippet }) {
               <select
                 id="submit-option"
                 name="submit-option"
-                className="rounded-md border-gray-300 px-2 py-1.5 pr-8 text-sm font-medium text-gray-900 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                className="rounded-md border-gray-300 px-2 py-1.5 pr-8 text-sm font-medium text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               >
                 <option value="1">Subnet 1</option>
                 <option value="2">Subnet 2</option>
                 <option value="3">Subnet 3</option>
               </select>
               <button
-                className="rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500"
+                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
                 onClick={run}
               >
                 Submit to Bittensor
@@ -254,16 +260,16 @@ function Environment({ theme, snippet }: { theme: string; snippet?: Snippet }) {
 
         {isDragging && (
           <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center bg-white bg-opacity-10 backdrop-blur-sm backdrop-filter">
-            <div className="rounded-md bg-emerald-50 p-4">
+            <div className="rounded-md bg-indigo-50 p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <DocumentArrowDownIcon
-                    className="h-5 w-5 text-emerald-400"
+                    className="h-5 w-5 text-indigo-400"
                     aria-hidden="true"
                   />
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-emerald-800">
+                  <p className="text-sm font-medium text-indigo-800">
                     Drop file to upload
                   </p>
                 </div>
@@ -304,7 +310,7 @@ function Environment({ theme, snippet }: { theme: string; snippet?: Snippet }) {
                       type="text"
                       name="name"
                       id="name"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       value={snippetName}
                       onChange={(e) => setSnippetName(e.target.value)}
                     />
@@ -317,7 +323,7 @@ function Environment({ theme, snippet }: { theme: string; snippet?: Snippet }) {
               <button
                 type="button"
                 className={clsx(
-                  "inline-flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto",
+                  "inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto",
                   (!snippetName || isSaving) && "cursor-not-allowed opacity-50"
                 )}
                 onClick={handleSave}

@@ -11,7 +11,7 @@ import Home from "./pages/app/Home";
 import Compute from "./pages/app/Compute";
 import Template from "./pages/app/Template";
 import Editor from "./pages/app/Editor";
-import Account from "./pages/Account";
+import Account from "./pages/app/Account";
 
 import SignIn from "./pages/auth/SignIn";
 import Register from "./pages/auth/Register";

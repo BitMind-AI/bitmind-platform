@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@supabase/supabase-js": "https://cdn.skypack.dev/@supabase/supabase-js@2.8.0"
+  }
+}

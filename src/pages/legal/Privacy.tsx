@@ -8,11 +8,11 @@ export default function Privacy() {
               Privacy Policy
             </span>
           </h1>
-          <p className="prose prose-emerald mt-8 text-xl leading-8 text-gray-500 dark:text-gray-100">
+          <p className="prose prose-indigo mt-8 text-xl leading-8 text-gray-500 dark:text-gray-100">
             COPY
           </p>
         </div>
-        <div className="prose prose-lg prose-emerald mx-auto mt-6 text-gray-500 dark:text-gray-100">
+        <div className="prose prose-lg prose-indigo mx-auto mt-6 text-gray-500 dark:text-gray-100">
           <h2 className="text-gray-900 dark:text-white">HEADER</h2>
           <p>BODY</p>
         </div>

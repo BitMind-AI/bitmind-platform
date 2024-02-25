@@ -1,31 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "../lib/supabase";
-import useSupabase from "../hooks/useSupabase";
-import useNotifications from "../hooks/useNotifications";
+import { supabase } from "../../lib/supabase";
+import useSupabase from "../../hooks/useSupabase";
+import useNotifications from "../../hooks/useNotifications";
 
-import Contact from "../components/Contact";
+import Contact from "../../components/Contact";
 
-import {
-  CodeBracketSquareIcon,
-  PencilIcon,
-  TrashIcon,
-  XMarkIcon,
-} from "@heroicons/react/20/solid";
-import Loader from "../components/Loader";
-import Dialog from "../components/Dialog";
-
-import clsx from "clsx";
-import DialogEmpty from "../components/DialogEmpty";
+import { PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import Loader from "../../components/Loader";
+import Dialog from "../../components/Dialog";
+import DialogEmpty from "../../components/DialogEmpty";
 
 export default function Account() {
   const [snippetsLoading, setSnippetsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [snippets, setSnippets] = useState<any[]>([]);
-  const [snippetEmbedCode, setSnippetEmbedCode] = useState<string>();
-  const [snippetCopied, setSnippetCopied] = useState(false);
   const [snippetToDelete, setSnippetToDelete] = useState<string>();
-  const [portalLoading, setPortalLoading] = useState(false);
   const [supportModalOpen, setSupportModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -103,29 +93,6 @@ export default function Account() {
     }
   };
 
-  const handleManageSubscription = async () => {
-    if (portalLoading) return;
-    try {
-      setPortalLoading(true);
-      const { data, error } = await supabase.functions.invoke(
-        "load-stripe-portal",
-        { body: { redirectURL: `${window.location.origin}/account` } }
-      );
-      if (error) throw error;
-
-      window.location.replace(data.url);
-    } catch (error) {
-      addMessage({
-        title: "Error loading billing portal",
-        message: "Please try again later.",
-        type: "error",
-      });
-      console.error("Error loading portal:", error);
-    } finally {
-      setPortalLoading(false);
-    }
-  };
-
   const handleDeleteAccount = async () => {
     try {
       const { error } = await supabase.functions.invoke("close-account");
@@ -161,7 +128,7 @@ export default function Account() {
           >
             <div className="absolute left-16 top-full -mt-16 transform-gpu opacity-50 blur-3xl dark:opacity-75 xl:left-1/2 xl:-ml-80">
               <div
-                className="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#77B255] to-[#3F725F]"
+                className="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#4F46E5] to-[#4238CA]"
                 style={{
                   clipPath:
                     "polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)",
@@ -238,25 +205,11 @@ export default function Account() {
                           {code.length > 200 ? "..." : ""}
                         </pre>
                       </div>
-                      <button
-                        className="mt-1 inline-flex items-center gap-x-1.5 rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100"
-                        onClick={() =>
-                          setSnippetEmbedCode(
-                            `<iframe src="${window.location.origin}/embed/${profile.username}/${id}" width="100%" height="400" frameBorder="0"></iframe>`
-                          )
-                        }
-                      >
-                        <CodeBracketSquareIcon
-                          className="-ml-0.5 h-5 w-5"
-                          aria-hidden="true"
-                        />
-                        Embed this snippet
-                      </button>
                     </div>
                     <div className="-mt-px flex divide-x divide-gray-200 border-t dark:divide-gray-600 dark:border-gray-600">
                       <div className="flex w-0 flex-1">
                         <Link
-                          to={`/?edit=${id}`}
+                          to={`/editor/?edit=${id}`}
                           className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-700"
                         >
                           <PencilIcon
@@ -289,9 +242,12 @@ export default function Account() {
                     </p>
                     <Link
                       to="/"
-                      className="relative mt-6 inline-flex items-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                      className="relative mt-6 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                      Back to editor
+                      <span className="mr-2" aria-hidden="true">
+                        &#x2190;
+                      </span>
+                      Back to home
                     </Link>
                   </div>
                 </div>
@@ -302,39 +258,14 @@ export default function Account() {
           <div className="mt-8">
             <div className="mt-8 max-w-2xl">
               <h2 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                Manage subscription
-              </h2>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-200">
-                Update your payment information, view past invoices or cancel
-                your subscription.
-              </p>
-              <button
-                type="button"
-                className={clsx(
-                  "relative mt-4 flex justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2",
-                  portalLoading && "cursor-not-allowed opacity-50"
-                )}
-                onClick={handleManageSubscription}
-                disabled={portalLoading}
-              >
-                Manage
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-8">
-            <div className="mt-8 max-w-2xl">
-              <h2 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
                 Support
               </h2>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-200">
-                If you have any questions or need help, please contact us. You
-                can also request a refund within 30 days of your purchase if you
-                are not satisfied with your subscription.
+                If you have any questions or need help, please contact us.
               </p>
               <button
                 type="button"
-                className="relative mt-4 flex justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="relative mt-4 flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 onClick={() => setSupportModalOpen(true)}
               >
                 Contact support
@@ -364,62 +295,6 @@ export default function Account() {
           </div>
         </div>
       </main>
-
-      <DialogEmpty
-        show={!!snippetEmbedCode}
-        onClose={() => setSnippetEmbedCode(undefined)}
-      >
-        <button
-          className="absolute right-0 top-0 p-4"
-          onClick={() => setSnippetEmbedCode(undefined)}
-        >
-          <span className="sr-only">Close</span>
-          <XMarkIcon className="h-6 w-6 text-neutral-500 dark:text-neutral-400" />
-        </button>
-        <div className="bg-white py-6 sm:py-12">
-          <div className="mx-auto px-6 lg:px-8">
-            <div className="pb-12">
-              <h2 className="text-base font-semibold leading-7 text-gray-900">
-                Embed snippet
-              </h2>
-              <p className="mt-1 text-sm leading-6 text-gray-600">
-                Copy the code below and paste it into your website. Adjust the
-                width and height values below to best fit your website.
-              </p>
-              <div className="mt-6 overflow-x-auto rounded-lg bg-neutral-100 dark:bg-neutral-800">
-                <div className="px-6 py-4">
-                  <pre className="text-sm text-neutral-600 dark:text-neutral-400">
-                    <code>{snippetEmbedCode}</code>
-                  </pre>
-                </div>
-              </div>
-              <div className="mt-6">
-                <button
-                  type="button"
-                  className="relative inline-flex items-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-                  onClick={() => {
-                    navigator.clipboard.writeText(snippetEmbedCode || "");
-                    setSnippetCopied(true);
-                    setTimeout(() => setSnippetCopied(false), 3000);
-                  }}
-                >
-                  {snippetCopied ? "Copied!" : "Copy code"}
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-              <button
-                type="button"
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                onClick={() => setSnippetEmbedCode(undefined)}
-              >
-                Done
-              </button>
-            </div>
-          </div>
-        </div>
-      </DialogEmpty>
 
       <Dialog
         show={!!snippetToDelete}
