@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import { supabase } from "./lib/supabase";
+import { Session } from "@supabase/supabase-js";
+
 import { capitalizeFirstLetter } from "./utils/helpers";
 
+import { PythonProvider } from "react-py";
 import { SupabaseProvider } from "./providers/SupabaseProvider";
 import { NotificationsProvider } from "./providers/NotificationsProvider";
 
@@ -27,7 +30,6 @@ import Support from "./pages/Support";
 import AppLayout from "./layouts/AppLayout";
 import Loader from "./components/Loader";
 import Notifications from "./components/Notifications";
-import { Session } from "@supabase/supabase-js";
 
 export type Snippet = {
   id: string;
@@ -51,6 +53,18 @@ function App() {
       setLoading(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    navigator.serviceWorker
+      .register("/react-py-sw.js")
+      .then((registration) =>
+        console.log(
+          "Service Worker registration successful with scope: ",
+          registration.scope
+        )
+      )
+      .catch((err) => console.log("Service Worker registration failed: ", err));
   }, []);
 
   useEffect(() => {
@@ -82,67 +96,71 @@ function App() {
   if (loading) return <Loader />;
 
   return (
-    <SupabaseProvider session={session}>
-      <NotificationsProvider>
-        <>
-          <div className="h-full">
-            <Routes>
-              <Route element={<AppLayout theme={theme} setTheme={setTheme} />}>
+    <PythonProvider lazy={pathname.startsWith("/embed")}>
+      <SupabaseProvider session={session}>
+        <NotificationsProvider>
+          <>
+            <div className="h-full">
+              <Routes>
                 <Route
-                  path="/"
-                  element={
-                    <ProtectedRoute>
-                      <Home />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="compute"
-                  element={
-                    <ProtectedRoute>
-                      <Compute />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="template"
-                  element={
-                    <ProtectedRoute>
-                      <Template />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="editor"
-                  element={
-                    <ProtectedRoute>
-                      <Editor theme={theme} />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="account"
-                  element={
-                    <ProtectedRoute>
-                      <Account />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="terms" element={<Terms />} />
-                <Route path="privacy" element={<Privacy />} />
-                <Route path="support" element={<Support />} />
-              </Route>
-              <Route path="signin" element={<SignIn />} />
-              <Route path="register" element={<Register />} />
-              <Route path="forgot-password" element={<ForgotPassword />} />
-              <Route path="error" element={<Error />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
-          <Notifications />
-        </>
-      </NotificationsProvider>
-    </SupabaseProvider>
+                  element={<AppLayout theme={theme} setTheme={setTheme} />}
+                >
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <Home />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="compute"
+                    element={
+                      <ProtectedRoute>
+                        <Compute />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="template"
+                    element={
+                      <ProtectedRoute>
+                        <Template />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="editor"
+                    element={
+                      <ProtectedRoute>
+                        <Editor theme={theme} />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="account"
+                    element={
+                      <ProtectedRoute>
+                        <Account />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="terms" element={<Terms />} />
+                  <Route path="privacy" element={<Privacy />} />
+                  <Route path="support" element={<Support />} />
+                </Route>
+                <Route path="signin" element={<SignIn />} />
+                <Route path="register" element={<Register />} />
+                <Route path="forgot-password" element={<ForgotPassword />} />
+                <Route path="error" element={<Error />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+            <Notifications />
+          </>
+        </NotificationsProvider>
+      </SupabaseProvider>
+    </PythonProvider>
   );
 }
 
