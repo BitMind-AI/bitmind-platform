@@ -7,7 +7,7 @@ import { templateOptions } from "../../fixtures/template";
 import Steps from "../../components/Steps";
 import clsx from "clsx";
 
-export default function Preview() {
+export default function Review() {
   const [isDeploying, setIsDeploying] = useState(false);
   const [deploymentStep, setDeploymentStep] = useState(1);
 
@@ -25,7 +25,7 @@ export default function Preview() {
       href: `/template?computeId=${computeId}`,
       status: "complete",
     },
-    { id: "Step 3", name: "Preview", href: "#", status: "current" },
+    { id: "Step 3", name: "Review", href: "#", status: "current" },
   ];
 
   // mock deployment
@@ -104,7 +104,7 @@ export default function Preview() {
         <div className="md:flex md:items-center md:justify-between">
           <div className="min-w-0 flex-1">
             <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
-              Preview deployment
+              Review deployment
             </h2>
           </div>
         </div>

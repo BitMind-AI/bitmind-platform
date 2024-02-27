@@ -13,7 +13,7 @@ import { NotificationsProvider } from "./providers/NotificationsProvider";
 import Home from "./pages/app/Home";
 import Compute from "./pages/app/Compute";
 import Template from "./pages/app/Template";
-import Preview from "./pages/app/Preview";
+import Review from "./pages/app/Review";
 import Editor from "./pages/app/Editor";
 import Account from "./pages/app/Account";
 
@@ -60,12 +60,14 @@ function App() {
     navigator.serviceWorker
       .register("/react-py-sw.js")
       .then((registration) =>
-        console.log(
+        console.debug(
           "Service Worker registration successful with scope: ",
           registration.scope
         )
       )
-      .catch((err) => console.log("Service Worker registration failed: ", err));
+      .catch((err) =>
+        console.error("Service Worker registration failed: ", err)
+      );
   }, []);
 
   useEffect(() => {
@@ -131,10 +133,10 @@ function App() {
                     }
                   />
                   <Route
-                    path="preview"
+                    path="review"
                     element={
                       <ProtectedRoute>
-                        <Preview />
+                        <Review />
                       </ProtectedRoute>
                     }
                   />

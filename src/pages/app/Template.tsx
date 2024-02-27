@@ -7,7 +7,7 @@ import Steps from "../../components/Steps";
 const steps = [
   { id: "Step 1", name: "Compute", href: "/compute", status: "complete" },
   { id: "Step 2", name: "Template", href: "/template", status: "current" },
-  { id: "Step 3", name: "Preview", href: "#", status: "upcoming" },
+  { id: "Step 3", name: "Review", href: "#", status: "upcoming" },
 ];
 
 export default function Compute() {
@@ -64,7 +64,7 @@ export default function Compute() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <Link
-                      to={`/preview?computeId=${computeId}&templateId=${id}`}
+                      to={`/review?computeId=${computeId}&templateId=${id}`}
                       className="focus:outline-none"
                     >
                       <span className="absolute inset-0" aria-hidden="true" />
@@ -89,7 +89,7 @@ export default function Compute() {
           <p className="mt-8 text-sm text-gray-700 dark:text-gray-400">
             Don't see the template you're looking for?{" "}
             <Link
-              to={`/preview?computeId=${computeId}`}
+              to={`/review?computeId=${computeId}`}
               className="font-medium text-indigo-600 hover:text-indigo-500"
             >
               Continue with a blank template

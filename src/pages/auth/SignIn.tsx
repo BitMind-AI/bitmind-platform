@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 export default function SignIn() {
   const [redirectUrl, setRedirectUrl] = useState<string>();
@@ -10,6 +10,7 @@ export default function SignIn() {
   const [password, setPassword] = useState<string>("");
 
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check to see if we have a redirect URL
@@ -28,6 +29,7 @@ export default function SignIn() {
         password,
       });
       if (error) throw error;
+      navigate(redirectUrl || "/");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.message) {

@@ -8,7 +8,7 @@ import clsx from "clsx";
 const steps = [
   { id: "Step 1", name: "Compute", href: "/compute", status: "current" },
   { id: "Step 2", name: "Template", href: "#", status: "upcoming" },
-  { id: "Step 3", name: "Preview", href: "#", status: "upcoming" },
+  { id: "Step 3", name: "Review", href: "#", status: "upcoming" },
 ];
 
 export default function Compute() {

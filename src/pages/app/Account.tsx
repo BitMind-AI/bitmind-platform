@@ -141,17 +141,29 @@ export default function Account() {
           <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <div className="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none">
               <div className="flex items-center gap-x-6">
-                <img
-                  src={profile.avatar_url}
-                  alt=""
-                  className="h-16 w-16 flex-none rounded-full ring-1 ring-gray-900/10 dark:ring-white/10"
-                />
+                {profile.avatar_url ? (
+                  <img
+                    src={profile.avatar_url}
+                    alt=""
+                    className="h-16 w-16 flex-none rounded-full ring-1 ring-gray-900/10 dark:ring-white/10"
+                  />
+                ) : (
+                  <span className="inline-block h-16 w-16 overflow-hidden rounded-full bg-gray-100">
+                    <svg
+                      className="h-full w-full text-gray-300"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  </span>
+                )}
                 <h1>
-                  <div className="text-sm leading-6 text-gray-500 dark:text-gray-300">
+                  <div className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
                     {profile.full_name}
                   </div>
-                  <div className="mt-1 text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                    {profile.username}
+                  <div className="text-sm leading-6 text-gray-500 dark:text-gray-300 mt-1">
+                    {profile.username || user.email}
                   </div>
                 </h1>
               </div>
@@ -239,20 +251,11 @@ export default function Account() {
                   <div className="col-span-3">
                     <div className="flex flex-col items-center justify-center gap-y-4">
                       <h2 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                        No snippets found
+                        No projects found
                       </h2>
                       <p className="text-sm text-gray-500 dark:text-gray-300">
-                        Any snippets you save will show up here.
+                        Any projects you save will show up here.
                       </p>
-                      <Link
-                        to="/"
-                        className="relative mt-6 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      >
-                        <span className="mr-2" aria-hidden="true">
-                          &#x2190;
-                        </span>
-                        Back to home
-                      </Link>
                     </div>
                   </div>
                 )}

@@ -46,10 +46,9 @@ export default function Register() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/plan`,
+          emailRedirectTo: window.location.origin,
           data: {
-            name,
-            account_type: "business",
+            full_name: name,
           },
         },
       });
