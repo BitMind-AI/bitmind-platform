@@ -13,6 +13,7 @@ import { NotificationsProvider } from "./providers/NotificationsProvider";
 import Home from "./pages/app/Home";
 import Compute from "./pages/app/Compute";
 import Template from "./pages/app/Template";
+import Preview from "./pages/app/Preview";
 import Editor from "./pages/app/Editor";
 import Account from "./pages/app/Account";
 
@@ -126,6 +127,14 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <Template />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="preview"
+                    element={
+                      <ProtectedRoute>
+                        <Preview />
                       </ProtectedRoute>
                     }
                   />

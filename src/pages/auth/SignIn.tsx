@@ -179,12 +179,12 @@ export default function SignIn() {
                       Password
                     </label>
                     <div className="text-sm leading-6">
-                      <a
-                        href="/forgot-password"
+                      <Link
+                        to="/forgot-password"
                         className="font-semibold text-indigo-600 hover:text-indigo-500"
                       >
                         Forgot password?
-                      </a>
+                      </Link>
                     </div>
                   </div>
                   <div className="mt-2">
@@ -213,12 +213,12 @@ export default function SignIn() {
 
             <p className="mt-8 text-sm leading-6 text-gray-500">
               Don't have an account?{" "}
-              <a
-                href="/register"
+              <Link
+                to="/register"
                 className="font-semibold text-indigo-600 hover:text-indigo-500"
               >
                 Register here
-              </a>
+              </Link>
             </p>
           </div>
 
