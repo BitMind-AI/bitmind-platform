@@ -4,9 +4,16 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { supabase } from "./lib/supabase";
 import { Session } from "@supabase/supabase-js";
 
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+
+import useNotifications from "./hooks/useNotifications";
+
 import { capitalizeFirstLetter } from "./utils/helpers";
 
-import { PythonProvider } from "react-py";
 import { SupabaseProvider } from "./providers/SupabaseProvider";
 import { NotificationsProvider } from "./providers/NotificationsProvider";
 
@@ -47,6 +54,21 @@ function App() {
 
   const { pathname } = useLocation();
 
+  const { addMessage } = useNotifications();
+
+  const queryClient = new QueryClient({
+    queryCache: new QueryCache({
+      onError: (error) => {
+        console.error("QueryCache error", error);
+        addMessage({
+          title: "Error",
+          message: error.message || "An error occurred",
+          type: "error",
+        });
+      },
+    }),
+  });
+
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     supabase.auth.getSession().then(({ data: { session } }: any) => {
@@ -54,20 +76,6 @@ function App() {
       setLoading(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    navigator.serviceWorker
-      .register("/react-py-sw.js")
-      .then((registration) =>
-        console.debug(
-          "Service Worker registration successful with scope: ",
-          registration.scope
-        )
-      )
-      .catch((err) =>
-        console.error("Service Worker registration failed: ", err)
-      );
   }, []);
 
   useEffect(() => {
@@ -99,7 +107,7 @@ function App() {
   if (loading) return <Loader />;
 
   return (
-    <PythonProvider lazy={pathname.startsWith("/embed")}>
+    <QueryClientProvider client={queryClient}>
       <SupabaseProvider session={session}>
         <NotificationsProvider>
           <>
@@ -171,7 +179,7 @@ function App() {
           </>
         </NotificationsProvider>
       </SupabaseProvider>
-    </PythonProvider>
+    </QueryClientProvider>
   );
 }
 

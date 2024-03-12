@@ -1,62 +1,26 @@
-import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
-import useSupabase from "../../hooks/useSupabase";
-import useNotifications from "../../hooks/useNotifications";
+import { useQuery } from "@tanstack/react-query";
+
+import { fetchWorkspaces } from "../../api/workspaces";
 
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 
 import Loader from "../../components/Loader";
 import { Link } from "react-router-dom";
+import clsx from "clsx";
+
+const statuses = {
+  stopped: "text-gray-500 bg-gray-100/10",
+  running: "text-green-400 bg-green-400/10",
+  error: "text-rose-400 bg-rose-400/10",
+};
 
 export default function Home() {
-  const [snippetsLoading, setSnippetsLoading] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [snippets, setSnippets] = useState<any[]>([]);
+  const { data: workspaces, isLoading } = useQuery({
+    queryKey: ["workspaces"],
+    queryFn: fetchWorkspaces,
+  });
 
-  const { user } = useSupabase();
-  const { addMessage } = useNotifications();
-
-  useEffect(() => {
-    if (user) {
-      getSnippets();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const getSnippets = async () => {
-    if (!user || snippetsLoading) return;
-    try {
-      setSnippetsLoading(true);
-      const { data, error, status } = await supabase
-        .from("snippets")
-        .select(
-          `id,
-          title,
-          data->code,
-          updated_at`
-        )
-        .eq("user_id", user.id)
-        .order("updated_at", { ascending: false });
-      if (error && status !== 406) {
-        throw error;
-      }
-      if (data) {
-        setSnippets(data);
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      addMessage({
-        title: "Error getting snippets",
-        message: "Please try again later.",
-        type: "error",
-      });
-      console.error("Error getting snippets:", error.message);
-    } finally {
-      setSnippetsLoading(false);
-    }
-  };
-
-  if (!user || snippetsLoading) {
+  if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white dark:bg-neutral-800">
         <Loader />
@@ -71,7 +35,7 @@ export default function Home() {
           Welcome to the BitMind Platform!
         </h2>
         <p className="mx-auto mt-4 max-w-3xl text-center text-xl text-gray-500 dark:text-gray-400">
-          Create a new project or continue with an existing one.
+          Create a new workspace or continue with an existing one.
         </p>
         <div className="mx-auto mt-12 max-w-lg lg:max-w-3xl">
           <div className="flex justify-center">
@@ -79,52 +43,88 @@ export default function Home() {
               to="/compute"
               className="bg-indigo-600 border border-transparent rounded-md py-3 px-8 text-base font-medium text-white hover:bg-indigo-700"
             >
-              Create New Project
+              Create New Workspace
             </Link>
           </div>
         </div>
 
         <div className="mx-auto mt-12 max-w-lg lg:max-w-3xl">
           <h3 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-            Existing Projects
+            Existing Workspaces
           </h3>
+
           <ul
             role="list"
-            className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl mt-8"
+            className="divide-y dark:divide-white/5 divide-gray-100"
           >
-            {snippets.length > 0 ? (
-              snippets.map(({ id, title, updated_at }) => (
-                <Link
-                  to={`/editor?edit=${id}`}
-                  key={id}
-                  className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6"
-                >
-                  <div className="flex min-w-0 gap-x-4">
+            {workspaces && workspaces.count > 0 ? (
+              workspaces.workspaces.map(
+                ({
+                  id,
+                  name,
+                  template_display_name,
+                  latest_build,
+                  last_used_at,
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                }: any) => (
+                  <li
+                    key={id}
+                    className="relative flex items-center space-x-4 py-4"
+                  >
                     <div className="min-w-0 flex-auto">
-                      <p className="text-sm font-semibold leading-6 text-gray-900">
-                        {title}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-x-4">
-                    <div className="hidden sm:flex sm:flex-col sm:items-end">
-                      <p className="mt-1 text-xs leading-5 text-gray-500">
-                        Last updated{" "}
-                        <time dateTime={updated_at}>
-                          {new Date(updated_at).toLocaleDateString()}
-                        </time>
-                      </p>
+                      <div className="flex items-center gap-x-3">
+                        <div
+                          className={clsx(
+                            statuses[
+                              latest_build.status as keyof typeof statuses
+                            ],
+                            "flex-none rounded-full p-1"
+                          )}
+                        >
+                          <div className="h-2 w-2 rounded-full bg-current" />
+                        </div>
+                        <h2 className="min-w-0 text-sm font-semibold leading-6 dark:text-white text-gray-900">
+                          <Link
+                            to={`/editor?edit=${id}`}
+                            className="flex gap-x-2"
+                          >
+                            <span className="truncate">{name}</span>
+                            <span className="text-gray-400">/</span>
+                            <span className="whitespace-nowrap">
+                              {template_display_name}
+                            </span>
+                            <span className="absolute inset-0" />
+                          </Link>
+                        </h2>
+                      </div>
+                      <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
+                        <p className="truncate">
+                          {latest_build.initiator_name}
+                        </p>
+                        <svg
+                          viewBox="0 0 2 2"
+                          className="h-0.5 w-0.5 flex-none fill-gray-300"
+                        >
+                          <circle cx={1} cy={1} r={1} />
+                        </svg>
+                        <p className="whitespace-nowrap">
+                          Last used{" "}
+                          <time dateTime={last_used_at}>
+                            {new Date(last_used_at).toLocaleDateString()}
+                          </time>
+                        </p>
+                      </div>
                     </div>
                     <ChevronRightIcon
                       className="h-5 w-5 flex-none text-gray-400"
                       aria-hidden="true"
                     />
-                  </div>
-                </Link>
-              ))
+                  </li>
+                )
+              )
             ) : (
               <li className="px-4 py-5 sm:px-6">
-                <p className="text-sm text-gray-500">No projects found.</p>
+                <p className="text-sm text-gray-500">No workspaces found.</p>
               </li>
             )}
           </ul>
