@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
+import { jwtDecode } from "jwt-decode";
 
 type Profile = {
   id: string;

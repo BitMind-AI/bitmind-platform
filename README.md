@@ -10,6 +10,20 @@ Clone the repository and install the dependencies.
 npm install
 ```
 
+Copy the `.env.example` file to `.env` and fill in the required environment variables.
+
+```bash
+cp .env.example .env
+```
+
+**NOTE:** To get started with the test supabase project, you can keep the supabase URL and key as is. It's configured to use test Google and GitHub OAuth apps for authentication.
+
+Start the proxy server for Coder.
+
+```bash
+npm run proxy
+```
+
 Start the development server.
 
 ```bash
@@ -17,8 +31,6 @@ npm run dev
 ```
 
 Open the URL shown in the terminal to view the site.
-
-**Note:** The local Python interpreter doesn't work when running the development server. You will need to build the app first and preview the production build to see the Python interpreter in action.
 
 Building the app.
 

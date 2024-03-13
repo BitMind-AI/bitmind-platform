@@ -1,11 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { fetchWorkspaces } from "../../api/workspaces";
+import { supabase } from "../../lib/supabase";
+
+import { createWorkspace, fetchWorkspaces } from "../../api/workspaces";
 
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 
 import Loader from "../../components/Loader";
-import { Link } from "react-router-dom";
 import clsx from "clsx";
 
 const statuses = {
@@ -19,6 +21,34 @@ export default function Home() {
     queryKey: ["workspaces"],
     queryFn: fetchWorkspaces,
   });
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: () => {
+      console.log("Creating new workspace");
+
+      return createWorkspace({
+        name: `Workspace-${Math.random().toString(36).substring(7)}`,
+        // Adjust the templateId to match your own template
+        templateId: "b5a30f44-2562-4817-ae00-37427658b95e",
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["workspaces"],
+      });
+    },
+  });
+
+  const handleCreateCoderUser = async () => {
+    try {
+      const { error } = await supabase.functions.invoke("create-coder-user");
+      if (error) throw error;
+    } catch (error) {
+      console.error("Error creating coder user:", error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -38,13 +68,33 @@ export default function Home() {
           Create a new workspace or continue with an existing one.
         </p>
         <div className="mx-auto mt-12 max-w-lg lg:max-w-3xl">
-          <div className="flex justify-center">
+          {/* <div className="flex justify-center">
             <Link
               to="/compute"
               className="bg-indigo-600 border border-transparent rounded-md py-3 px-8 text-base font-medium text-white hover:bg-indigo-700"
             >
               Create New Workspace
             </Link>
+          </div> */}
+
+          <div className="flex justify-center">
+            <button
+              type="button"
+              className="bg-indigo-600 border border-transparent rounded-md py-3 px-8 text-base font-medium text-white hover:bg-indigo-700"
+              onClick={() => mutation.mutate()}
+            >
+              Create New Workspace
+            </button>
+          </div>
+
+          <div className="flex justify-center mt-8">
+            <button
+              type="button"
+              className="bg-white border border-gray-300 text-gray-700 rounded-md py-3 px-8 text-base font-medium hover:bg-gray-50"
+              onClick={handleCreateCoderUser}
+            >
+              Create Coder User
+            </button>
           </div>
         </div>
 

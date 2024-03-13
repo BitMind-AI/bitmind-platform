@@ -25,8 +25,10 @@ Deno.serve(async (req) => {
     );
 
     const token = req.headers.get("authorization")!.replace("Bearer ", "");
-    // deno-lint-ignore no-explicit-any
-    const [_header, payload, _signature] = decode(token) as any;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_header, payload, _signature] =
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      decode(token) as any;
     const { sub: userId } = payload;
 
     if (!userId) throw new Error("No user id!");
