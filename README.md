@@ -10,10 +10,10 @@ Clone the repository and install the dependencies.
 npm install
 ```
 
-Copy the `.env.example` file to `.env` and fill in the required environment variables.
+Copy the `.env.template` file to `.env` and fill in the required environment variables.
 
 ```bash
-cp .env.example .env
+cp .env.template .env
 ```
 
 **NOTE:** To get started with the test supabase project, you can keep the supabase URL and key as is. It's configured to use test Google and GitHub OAuth apps for authentication.
