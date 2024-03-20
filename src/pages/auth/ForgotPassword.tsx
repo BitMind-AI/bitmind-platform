@@ -1,44 +1,44 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { supabase } from "../../lib/supabase";
+import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { supabase } from '../../lib/supabase'
 
-import Logo from "../../components/Logo";
-import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import clsx from "clsx";
+import Logo from '../../components/Logo'
+import { CheckCircleIcon } from '@heroicons/react/20/solid'
+import clsx from 'clsx'
 
 export default function ForgotPassword() {
-  const { state } = useLocation();
+  const { state } = useLocation()
 
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState(state?.email ?? "");
-  const [resetError, setResetError] = useState<string>();
-  const [resetEmailSent, setResetEmailSent] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState(state?.email ?? '')
+  const [resetError, setResetError] = useState<string>()
+  const [resetEmailSent, setResetEmailSent] = useState(false)
 
   const handleForgotPassword = async () => {
     try {
-      setLoading(true);
-      setResetError(undefined);
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email);
-      if (error) throw error;
+      setLoading(true)
+      setResetError(undefined)
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email)
+      if (error) throw error
       if (data) {
-        setResetEmailSent(true);
+        setResetEmailSent(true)
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.message) {
-        setResetError(error.message);
+        setResetError(error.message)
       }
       console.error(
-        "Error resetting password:",
+        'Error resetting password:',
         error.error_description || error.message
-      );
+      )
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="flex min-h-full items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex min-h-full items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
         {!resetEmailSent ? (
           <>
@@ -53,8 +53,8 @@ export default function ForgotPassword() {
             <form
               className="mt-8 space-y-6"
               onSubmit={(e) => {
-                e.preventDefault();
-                handleForgotPassword();
+                e.preventDefault()
+                handleForgotPassword()
               }}
             >
               <input type="hidden" name="remember" defaultValue="true" />
@@ -81,10 +81,10 @@ export default function ForgotPassword() {
                 <button
                   type="submit"
                   className={clsx(
-                    "group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white",
+                    'group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white',
                     loading
-                      ? "opacity-50"
-                      : "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      ? 'opacity-50'
+                      : 'hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                   )}
                   disabled={loading}
                 >
@@ -133,5 +133,5 @@ export default function ForgotPassword() {
         </p>
       </div>
     </div>
-  );
+  )
 }

@@ -1,50 +1,50 @@
-import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useState } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
-import { computeOptions } from "../../fixtures/compute";
-import { templateOptions } from "../../fixtures/template";
+import { computeOptions } from '../../fixtures/compute'
+import { templateOptions } from '../../fixtures/template'
 
-import Steps from "../../components/Steps";
-import clsx from "clsx";
+import Steps from '../../components/Steps'
+import clsx from 'clsx'
 
 export default function Review() {
-  const [isDeploying, setIsDeploying] = useState(false);
-  const [deploymentStep, setDeploymentStep] = useState(1);
+  const [isDeploying, setIsDeploying] = useState(false)
+  const [deploymentStep, setDeploymentStep] = useState(1)
 
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
 
-  const computeId = searchParams.get("computeId");
-  const templateId = searchParams.get("templateId");
+  const computeId = searchParams.get('computeId')
+  const templateId = searchParams.get('templateId')
 
   const steps = [
-    { id: "Step 1", name: "Compute", href: "/compute", status: "complete" },
+    { id: 'Step 1', name: 'Compute', href: '/compute', status: 'complete' },
     {
-      id: "Step 2",
-      name: "Template",
+      id: 'Step 2',
+      name: 'Template',
       href: `/template?computeId=${computeId}`,
-      status: "complete",
+      status: 'complete'
     },
-    { id: "Step 3", name: "Review", href: "#", status: "current" },
-  ];
+    { id: 'Step 3', name: 'Review', href: '#', status: 'current' }
+  ]
 
   // mock deployment
   const handleDeploy = async () => {
-    setIsDeploying(true);
-    setDeploymentStep(1);
+    setIsDeploying(true)
+    setDeploymentStep(1)
     setInterval(() => {
-      setDeploymentStep((prev) => prev + 1);
-    }, 1000);
+      setDeploymentStep((prev) => prev + 1)
+    }, 1000)
     setTimeout(() => {
-      setIsDeploying(false);
-      navigate(`/editor?computeId=${computeId}&templateId=${templateId}`);
-    }, 4000);
-  };
+      setIsDeploying(false)
+      navigate(`/editor?computeId=${computeId}&templateId=${templateId}`)
+    }, 4000)
+  }
 
   if (isDeploying) {
     return (
-      <main className="flex h-full flex-1 bg-white dark:bg-neutral-800 flex-col">
-        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 w-full">
+      <main className="flex h-full flex-1 flex-col bg-white dark:bg-neutral-800">
+        <div className="mx-auto w-full max-w-7xl px-6 py-24 sm:py-32">
           <h4 className="sr-only">Status</h4>
           <p className="text-sm font-medium text-gray-900 dark:text-white">
             Deploying compute configuration...
@@ -59,32 +59,32 @@ export default function Review() {
             <div className="mt-6 hidden grid-cols-4 text-sm font-medium text-gray-600 sm:grid">
               <div
                 className={clsx(
-                  "text-left",
-                  deploymentStep >= 1 ? "text-indigo-600" : "text-gray-400"
+                  'text-left',
+                  deploymentStep >= 1 ? 'text-indigo-600' : 'text-gray-400'
                 )}
               >
                 Copying files
               </div>
               <div
                 className={clsx(
-                  "text-center",
-                  deploymentStep >= 2 ? "text-indigo-600" : "text-gray-400"
+                  'text-center',
+                  deploymentStep >= 2 ? 'text-indigo-600' : 'text-gray-400'
                 )}
               >
                 Spinning up compute
               </div>
               <div
                 className={clsx(
-                  "text-center",
-                  deploymentStep >= 3 ? "text-indigo-600" : "text-gray-400"
+                  'text-center',
+                  deploymentStep >= 3 ? 'text-indigo-600' : 'text-gray-400'
                 )}
               >
                 Turning gears
               </div>
               <div
                 className={clsx(
-                  "text-right",
-                  deploymentStep >= 4 ? "text-indigo-600" : "text-gray-400"
+                  'text-right',
+                  deploymentStep >= 4 ? 'text-indigo-600' : 'text-gray-400'
                 )}
               >
                 Deployed
@@ -93,17 +93,17 @@ export default function Review() {
           </div>
         </div>
       </main>
-    );
+    )
   }
 
   return (
-    <main className="flex h-full flex-1 bg-white dark:bg-neutral-800 flex-col">
+    <main className="flex h-full flex-1 flex-col bg-white dark:bg-neutral-800">
       <Steps steps={steps} />
 
-      <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 w-full">
+      <div className="mx-auto w-full max-w-7xl px-6 py-24 sm:py-32">
         <div className="md:flex md:items-center md:justify-between">
           <div className="min-w-0 flex-1">
-            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
+            <h2 className="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight">
               Review deployment
             </h2>
           </div>
@@ -129,7 +129,7 @@ export default function Review() {
                     <span className="block text-sm font-medium text-gray-900">
                       {computeOptions.find((c) => c.id === computeId)?.name}
                     </span>
-                    <span className="mt-1 text-sm flex items-center text-gray-500">
+                    <span className="mt-1 flex items-center text-sm text-gray-500">
                       {computeOptions.find((c) => c.id === computeId)?.charge}
                     </span>
                     <span className="mt-2 text-sm font-medium text-gray-900">
@@ -152,12 +152,12 @@ export default function Review() {
                   <span className="flex flex-col">
                     <span className="block text-sm font-medium text-gray-900">
                       {templateOptions.find((t) => t.id === templateId)?.name ??
-                        "Blank template"}
+                        'Blank template'}
                     </span>
                     <span className="mt-1 text-sm text-gray-500">
                       {templateOptions.find((t) => t.id === templateId)
                         ?.description ??
-                        "An empty workspace, pick your own tools."}
+                        'An empty workspace, pick your own tools.'}
                     </span>
                   </span>
                 </span>
@@ -192,7 +192,7 @@ export default function Review() {
           <div className="mx-auto mt-20 max-w-lg lg:max-w-3xl">
             <div className="flex justify-center">
               <button
-                className="bg-indigo-600 border border-transparent rounded-md py-3 px-8 text-base font-medium text-white hover:bg-indigo-700"
+                className="rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700"
                 onClick={handleDeploy}
               >
                 Looks good, deploy!
@@ -202,5 +202,5 @@ export default function Review() {
         </div>
       </div>
     </main>
-  );
+  )
 }

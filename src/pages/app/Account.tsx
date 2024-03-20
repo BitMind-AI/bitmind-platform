@@ -1,121 +1,121 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "../../lib/supabase";
-import useSupabase from "../../hooks/useSupabase";
-import useNotifications from "../../hooks/useNotifications";
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { supabase } from '../../lib/supabase'
+import useSupabase from '../../hooks/useSupabase'
+import useNotifications from '../../hooks/useNotifications'
 
-import Contact from "../../components/Contact";
+import Contact from '../../components/Contact'
 
-import { PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/20/solid";
-import Loader from "../../components/Loader";
-import Dialog from "../../components/Dialog";
-import DialogEmpty from "../../components/DialogEmpty";
+import { PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import Loader from '../../components/Loader'
+import Dialog from '../../components/Dialog'
+import DialogEmpty from '../../components/DialogEmpty'
 
 export default function Account() {
-  const [snippetsLoading, setSnippetsLoading] = useState(false);
+  const [snippetsLoading, setSnippetsLoading] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [snippets, setSnippets] = useState<any[]>([]);
-  const [snippetToDelete, setSnippetToDelete] = useState<string>();
-  const [supportModalOpen, setSupportModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [snippets, setSnippets] = useState<any[]>([])
+  const [snippetToDelete, setSnippetToDelete] = useState<string>()
+  const [supportModalOpen, setSupportModalOpen] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
-  const navigate = useNavigate();
-  const { user, profile } = useSupabase();
-  const { addMessage } = useNotifications();
+  const navigate = useNavigate()
+  const { user, profile } = useSupabase()
+  const { addMessage } = useNotifications()
 
   useEffect(() => {
     if (user) {
-      getSnippets();
+      getSnippets()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user])
 
   const getSnippets = async () => {
-    if (!user || snippetsLoading) return;
+    if (!user || snippetsLoading) return
     try {
-      setSnippetsLoading(true);
+      setSnippetsLoading(true)
       const { data, error, status } = await supabase
-        .from("snippets")
+        .from('snippets')
         .select(
           `id,
           title,
           data->code`
         )
-        .eq("user_id", user.id)
-        .order("updated_at", { ascending: false });
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
       if (error && status !== 406) {
-        throw error;
+        throw error
       }
       if (data) {
-        setSnippets(data);
+        setSnippets(data)
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       addMessage({
-        title: "Error getting snippets",
-        message: "Please try again later.",
-        type: "error",
-      });
-      console.error("Error getting snippets:", error.message);
+        title: 'Error getting snippets',
+        message: 'Please try again later.',
+        type: 'error'
+      })
+      console.error('Error getting snippets:', error.message)
     } finally {
-      setSnippetsLoading(false);
+      setSnippetsLoading(false)
     }
-  };
+  }
 
   const handleDelete = async () => {
-    if (!snippetToDelete) return;
+    if (!snippetToDelete) return
     try {
       const { error } = await supabase
-        .from("snippets")
+        .from('snippets')
         .delete()
-        .eq("id", snippetToDelete);
+        .eq('id', snippetToDelete)
       if (error) {
-        throw error;
+        throw error
       }
       setSnippets((prev) =>
         prev.filter((snippet) => snippet.id !== snippetToDelete)
-      );
+      )
       addMessage({
-        title: "Snippet deleted",
-        message: "Your snippet has been deleted.",
-        type: "success",
-      });
+        title: 'Snippet deleted',
+        message: 'Your snippet has been deleted.',
+        type: 'success'
+      })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       addMessage({
-        title: "Error deleting snippet",
-        message: "Please try again later.",
-        type: "error",
-      });
-      console.error("Error deleting snippet:", error.message);
+        title: 'Error deleting snippet',
+        message: 'Please try again later.',
+        type: 'error'
+      })
+      console.error('Error deleting snippet:', error.message)
     } finally {
-      setSnippetToDelete(undefined);
+      setSnippetToDelete(undefined)
     }
-  };
+  }
 
   const handleDeleteAccount = async () => {
     try {
-      const { error } = await supabase.functions.invoke("close-account");
-      if (error) throw error;
+      const { error } = await supabase.functions.invoke('close-account')
+      if (error) throw error
 
-      await supabase.auth.signOut();
-      navigate("/");
+      await supabase.auth.signOut()
+      navigate('/')
     } catch (error) {
       addMessage({
-        title: "Error closing account",
-        message: "Please try again later.",
-        type: "error",
-      });
-      console.error("Error closing account:", error);
+        title: 'Error closing account',
+        message: 'Please try again later.',
+        type: 'error'
+      })
+      console.error('Error closing account:', error)
     }
-  };
+  }
 
   if (!user || !profile) {
     return (
       <div className="flex h-screen items-center justify-center bg-white dark:bg-neutral-800">
         <Loader />
       </div>
-    );
+    )
   }
 
   return (
@@ -131,7 +131,7 @@ export default function Account() {
                 className="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#4F46E5] to-[#4238CA]"
                 style={{
                   clipPath:
-                    "polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)",
+                    'polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)'
                 }}
               />
             </div>
@@ -162,7 +162,7 @@ export default function Account() {
                   <div className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
                     {profile.full_name}
                   </div>
-                  <div className="text-sm leading-6 text-gray-500 dark:text-gray-300 mt-1">
+                  <div className="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-300">
                     {profile.username || user.email}
                   </div>
                 </h1>
@@ -177,7 +177,7 @@ export default function Account() {
               Projects
             </h2>
             {snippetsLoading ? (
-              <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3 mt-4">
+              <div className="mx-auto mt-4 grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                 {new Array(3).fill(null).map((_, i) => (
                   <div
                     key={i}
@@ -204,7 +204,7 @@ export default function Account() {
                 ))}
               </div>
             ) : (
-              <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3 mt-4">
+              <div className="mx-auto mt-4 grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                 {snippets.length > 0 ? (
                   snippets.map(({ id, title, code }) => (
                     <div
@@ -218,7 +218,7 @@ export default function Account() {
                         <div className="fade-mask h-32 w-full overflow-hidden rounded-md bg-gray-100 p-2 text-sm text-gray-900 dark:bg-gray-800 dark:text-gray-50">
                           <pre className="select-none text-xs">
                             {code.slice(0, 200)}
-                            {code.length > 200 ? "..." : ""}
+                            {code.length > 200 ? '...' : ''}
                           </pre>
                         </div>
                       </div>
@@ -294,7 +294,7 @@ export default function Account() {
                 type="button"
                 className="relative mt-4 flex justify-center rounded-md border border-transparent bg-red-700 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 onClick={() => {
-                  setDeleteModalOpen(true);
+                  setDeleteModalOpen(true)
                 }}
               >
                 Delete account
@@ -340,5 +340,5 @@ export default function Account() {
         <Contact />
       </DialogEmpty>
     </>
-  );
+  )
 }

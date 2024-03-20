@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState } from 'react'
 
-import DialogEmpty from "./DialogEmpty";
-import { XMarkIcon } from "@heroicons/react/20/solid";
+import DialogEmpty from './DialogEmpty'
+import { XMarkIcon } from '@heroicons/react/20/solid'
 
 function Environment() {
-  const [submitModalOpen, setSubmitModalOpen] = useState(false);
+  const [submitModalOpen, setSubmitModalOpen] = useState(false)
 
   return (
     <>
@@ -48,7 +48,7 @@ function Environment() {
         </div>
       </DialogEmpty>
     </>
-  );
+  )
 }
 
-export default Environment;
+export default Environment

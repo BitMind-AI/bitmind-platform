@@ -1,14 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from 'react-router-dom'
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 export default function Home({
   theme,
-  setTheme,
+  setTheme
 }: {
-  theme: string;
-  setTheme: (theme: string) => void;
+  theme: string
+  setTheme: (theme: string) => void
 }) {
   return (
     <div className="flex h-full min-h-screen min-w-[300px] flex-col">
@@ -18,5 +18,5 @@ export default function Home({
 
       <Footer />
     </div>
-  );
+  )
 }

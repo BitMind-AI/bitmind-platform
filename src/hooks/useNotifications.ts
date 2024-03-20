@@ -1,6 +1,6 @@
-import { useContext } from "react";
-import { NotificationsContext } from "../providers/NotificationsProvider";
+import { useContext } from 'react'
+import { NotificationsContext } from '../providers/NotificationsProvider'
 
 export default function useNotifications() {
-  return useContext(NotificationsContext);
+  return useContext(NotificationsContext)
 }

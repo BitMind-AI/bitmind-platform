@@ -1,10 +1,10 @@
 const faqs = [
   {
     id: 1,
-    question: "Why did the chicken cross the road?",
-    answer: "To get to the other side.",
-  },
-];
+    question: 'Why did the chicken cross the road?',
+    answer: 'To get to the other side.'
+  }
+]
 
 export default function Example() {
   return (
@@ -29,5 +29,5 @@ export default function Example() {
         </dl>
       </div>
     </main>
-  );
+  )
 }

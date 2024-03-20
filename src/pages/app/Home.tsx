@@ -1,67 +1,67 @@
-import { Link } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link } from 'react-router-dom'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { supabase } from "../../lib/supabase";
+import { supabase } from '../../lib/supabase'
 
-import { createWorkspace, fetchWorkspaces } from "../../api/workspaces";
+import { createWorkspace, fetchWorkspaces } from '../../api/workspaces'
 
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import { ChevronRightIcon } from '@heroicons/react/20/solid'
 
-import Loader from "../../components/Loader";
-import clsx from "clsx";
+import Loader from '../../components/Loader'
+import clsx from 'clsx'
 
 const statuses = {
-  stopped: "text-gray-500 bg-gray-100/10",
-  running: "text-green-400 bg-green-400/10",
-  error: "text-rose-400 bg-rose-400/10",
-};
+  stopped: 'text-gray-500 bg-gray-100/10',
+  running: 'text-green-400 bg-green-400/10',
+  error: 'text-rose-400 bg-rose-400/10'
+}
 
 export default function Home() {
   const { data: workspaces, isLoading } = useQuery({
-    queryKey: ["workspaces"],
-    queryFn: fetchWorkspaces,
-  });
+    queryKey: ['workspaces'],
+    queryFn: fetchWorkspaces
+  })
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const mutation = useMutation({
     mutationFn: () => {
-      console.log("Creating new workspace");
+      console.log('Creating new workspace')
 
       return createWorkspace({
         name: `Workspace-${Math.random().toString(36).substring(7)}`,
         // Adjust the templateId to match your own template
-        templateId: "b5a30f44-2562-4817-ae00-37427658b95e",
-      });
+        templateId: 'b5a30f44-2562-4817-ae00-37427658b95e'
+      })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["workspaces"],
-      });
-    },
-  });
+        queryKey: ['workspaces']
+      })
+    }
+  })
 
   const handleCreateCoderUser = async () => {
     try {
-      const { error } = await supabase.functions.invoke("create-coder-user");
-      if (error) throw error;
+      const { error } = await supabase.functions.invoke('create-coder-user')
+      if (error) throw error
     } catch (error) {
-      console.error("Error creating coder user:", error);
+      console.error('Error creating coder user:', error)
     }
-  };
+  }
 
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white dark:bg-neutral-800">
         <Loader />
       </div>
-    );
+    )
   }
 
   return (
     <main className="flex h-full flex-1 bg-white dark:bg-neutral-800">
       <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
-        <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl text-gray-900 dark:text-white">
+        <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
           Welcome to the BitMind Platform!
         </h2>
         <p className="mx-auto mt-4 max-w-3xl text-center text-xl text-gray-500 dark:text-gray-400">
@@ -80,17 +80,17 @@ export default function Home() {
           <div className="flex justify-center">
             <button
               type="button"
-              className="bg-indigo-600 border border-transparent rounded-md py-3 px-8 text-base font-medium text-white hover:bg-indigo-700"
+              className="rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700"
               onClick={() => mutation.mutate()}
             >
               Create New Workspace
             </button>
           </div>
 
-          <div className="flex justify-center mt-8">
+          <div className="mt-8 flex justify-center">
             <button
               type="button"
-              className="bg-white border border-gray-300 text-gray-700 rounded-md py-3 px-8 text-base font-medium hover:bg-gray-50"
+              className="rounded-md border border-gray-300 bg-white px-8 py-3 text-base font-medium text-gray-700 hover:bg-gray-50"
               onClick={handleCreateCoderUser}
             >
               Create Coder User
@@ -105,7 +105,7 @@ export default function Home() {
 
           <ul
             role="list"
-            className="divide-y dark:divide-white/5 divide-gray-100"
+            className="divide-y divide-gray-100 dark:divide-white/5"
           >
             {workspaces && workspaces.count > 0 ? (
               workspaces.workspaces.map(
@@ -114,7 +114,7 @@ export default function Home() {
                   name,
                   template_display_name,
                   latest_build,
-                  last_used_at,
+                  last_used_at
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 }: any) => (
                   <li
@@ -128,14 +128,15 @@ export default function Home() {
                             statuses[
                               latest_build.status as keyof typeof statuses
                             ],
-                            "flex-none rounded-full p-1"
+                            'flex-none rounded-full p-1'
                           )}
                         >
                           <div className="h-2 w-2 rounded-full bg-current" />
                         </div>
-                        <h2 className="min-w-0 text-sm font-semibold leading-6 dark:text-white text-gray-900">
+                        <h2 className="min-w-0 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                           <Link
-                            to={`/editor?edit=${id}`}
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            to={`/editor?subdomain=${latest_build.resources.find((r: any) => r.type === 'docker_container')?.agents[0]?.apps.find((a: any) => a.slug === 'vscode-web')?.subdomain_name}`}
                             className="flex gap-x-2"
                           >
                             <span className="truncate">{name}</span>
@@ -158,7 +159,7 @@ export default function Home() {
                           <circle cx={1} cy={1} r={1} />
                         </svg>
                         <p className="whitespace-nowrap">
-                          Last used{" "}
+                          Last used{' '}
                           <time dateTime={last_used_at}>
                             {new Date(last_used_at).toLocaleDateString()}
                           </time>
@@ -181,5 +182,5 @@ export default function Home() {
         </div>
       </div>
     </main>
-  );
+  )
 }

@@ -1,25 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
-import { computeOptions } from "../../fixtures/compute";
+import { computeOptions } from '../../fixtures/compute'
 
-import Steps from "../../components/Steps";
-import clsx from "clsx";
+import Steps from '../../components/Steps'
+import clsx from 'clsx'
 
 const steps = [
-  { id: "Step 1", name: "Compute", href: "/compute", status: "current" },
-  { id: "Step 2", name: "Template", href: "#", status: "upcoming" },
-  { id: "Step 3", name: "Review", href: "#", status: "upcoming" },
-];
+  { id: 'Step 1', name: 'Compute', href: '/compute', status: 'current' },
+  { id: 'Step 2', name: 'Template', href: '#', status: 'upcoming' },
+  { id: 'Step 3', name: 'Review', href: '#', status: 'upcoming' }
+]
 
 export default function Compute() {
   return (
-    <main className="flex h-full flex-1 bg-white dark:bg-neutral-800 flex-col">
+    <main className="flex h-full flex-1 flex-col bg-white dark:bg-neutral-800">
       <Steps steps={steps} />
 
-      <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 w-full">
+      <div className="mx-auto w-full max-w-7xl px-6 py-24 sm:py-32">
         <div className="md:flex md:items-center md:justify-between">
           <div className="min-w-0 flex-1">
-            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
+            <h2 className="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight">
               Compute
             </h2>
           </div>
@@ -108,10 +108,10 @@ export default function Compute() {
                             <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                               <span
                                 className={clsx(
-                                  "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium ring-1 ring-inset",
-                                  status === "Available"
-                                    ? "bg-green-50 text-green-700 ring-green-600/20"
-                                    : "bg-red-50 text-red-700 ring-red-600/20"
+                                  'inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium ring-1 ring-inset',
+                                  status === 'Available'
+                                    ? 'bg-green-50 text-green-700 ring-green-600/20'
+                                    : 'bg-red-50 text-red-700 ring-red-600/20'
                                 )}
                               >
                                 {status}
@@ -121,9 +121,9 @@ export default function Compute() {
                               <Link
                                 to={`/template?computeId=${id}`}
                                 className={clsx(
-                                  "inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50",
-                                  status !== "Available" &&
-                                    "cursor-not-allowed opacity-30 hover:bg-white"
+                                  'inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50',
+                                  status !== 'Available' &&
+                                    'cursor-not-allowed opacity-30 hover:bg-white'
                                 )}
                               >
                                 Select<span className="sr-only">, {name}</span>
@@ -141,5 +141,5 @@ export default function Compute() {
         </div>
       </div>
     </main>
-  );
+  )
 }

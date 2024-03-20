@@ -1,43 +1,43 @@
-import { useState } from "react";
-import { CheckCircleIcon } from "@heroicons/react/20/solid";
+import { useState } from 'react'
+import { CheckCircleIcon } from '@heroicons/react/20/solid'
 
 export default function Contact() {
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    reason: "",
-    message: "",
-  });
-  const [messageSent, setMessageSent] = useState(false);
+    name: '',
+    email: '',
+    reason: '',
+    message: ''
+  })
+  const [messageSent, setMessageSent] = useState(false)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const encode = (data: any) => {
     return Object.keys(data)
       .map(
-        (key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key])
+        (key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])
       )
-      .join("&");
-  };
+      .join('&')
+  }
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const response = await fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: encode({ "form-name": "contact", ...form }),
-    });
+    const response = await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode({ 'form-name': 'contact', ...form })
+    })
     if (response.ok) {
-      setMessageSent(true);
+      setMessageSent(true)
     } else {
-      console.error("Error sending message");
+      console.error('Error sending message')
     }
-  };
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (e: { target: { id: any; value: any } }) => {
-    setForm({ ...form, [e.target.id]: e.target.value });
-  };
+    setForm({ ...form, [e.target.id]: e.target.value })
+  }
 
   return (
     <div className="bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-24 xl:pl-12">
@@ -148,5 +148,5 @@ export default function Contact() {
         )}
       </div>
     </div>
-  );
+  )
 }

@@ -1,12 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
 const navigation = {
   main: [
-    { name: "Terms of Service", href: "/terms" },
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Support", href: "/support" },
-  ],
-};
+    { name: 'Terms of Service', href: '/terms' },
+    { name: 'Privacy Policy', href: '/privacy' },
+    { name: 'Support', href: '/support' }
+  ]
+}
 
 export default function Footer() {
   return (
@@ -18,7 +18,7 @@ export default function Footer() {
         >
           {navigation.main.map((item) => (
             <div key={item.name} className="pb-6 md:pb-0">
-              {item.href.startsWith("/") ? (
+              {item.href.startsWith('/') ? (
                 <Link
                   to={item.href}
                   className="text-sm leading-6 text-gray-600 hover:text-gray-900 dark:text-gray-50 dark:hover:text-gray-200"
@@ -37,7 +37,7 @@ export default function Footer() {
           ))}
         </nav>
         <p className="mt-10 text-center text-xs leading-5 text-gray-500 dark:text-gray-400 md:mt-0">
-          &copy; {new Date().getFullYear()}{" "}
+          &copy; {new Date().getFullYear()}{' '}
           <a
             className="hover:text-gray-900 dark:hover:text-gray-50"
             href="https://bitmind.ca"
@@ -49,5 +49,5 @@ export default function Footer() {
         </p>
       </div>
     </footer>
-  );
+  )
 }

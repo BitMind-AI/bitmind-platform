@@ -1,13 +1,13 @@
-import { Fragment } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
 
 function DialogEmpty({
   show,
   onClose,
-  children,
+  children
 }: React.PropsWithChildren<{
-  show: boolean;
-  onClose: () => void;
+  show: boolean
+  onClose: () => void
 }>) {
   return (
     <Transition.Root show={show} as={Fragment}>
@@ -43,7 +43,7 @@ function DialogEmpty({
         </div>
       </Dialog>
     </Transition.Root>
-  );
+  )
 }
 
-export default DialogEmpty;
+export default DialogEmpty

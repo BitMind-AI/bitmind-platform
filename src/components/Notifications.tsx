@@ -1,16 +1,16 @@
-import { Fragment } from "react";
+import { Fragment } from 'react'
 
-import useNotifications from "../hooks/useNotifications";
+import useNotifications from '../hooks/useNotifications'
 
-import { Transition } from "@headlessui/react";
+import { Transition } from '@headlessui/react'
 import {
   CheckCircleIcon,
-  ExclamationCircleIcon,
-} from "@heroicons/react/24/outline";
-import { XMarkIcon } from "@heroicons/react/20/solid";
+  ExclamationCircleIcon
+} from '@heroicons/react/24/outline'
+import { XMarkIcon } from '@heroicons/react/20/solid'
 
 export default function Notifications() {
-  const { messages, removeMessage } = useNotifications();
+  const { messages, removeMessage } = useNotifications()
 
   return (
     <div
@@ -35,7 +35,7 @@ export default function Notifications() {
                 <div className="p-4">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      {type === "success" ? (
+                      {type === 'success' ? (
                         <CheckCircleIcon
                           className="h-6 w-6 text-green-400"
                           aria-hidden="true"
@@ -70,5 +70,5 @@ export default function Notifications() {
           ))}
       </div>
     </div>
-  );
+  )
 }

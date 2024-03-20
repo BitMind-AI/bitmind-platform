@@ -1,73 +1,73 @@
-import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from 'react'
+import { supabase } from '../../lib/supabase'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 export default function SignIn() {
-  const [redirectUrl, setRedirectUrl] = useState<string>();
-  const [loginError, setLoginError] = useState<string>();
+  const [redirectUrl, setRedirectUrl] = useState<string>()
+  const [loginError, setLoginError] = useState<string>()
 
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
 
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Check to see if we have a redirect URL
-    const redirect = searchParams.get("redirect");
+    const redirect = searchParams.get('redirect')
     if (redirect) {
-      setRedirectUrl(redirect);
+      setRedirectUrl(redirect)
     }
-  }, [searchParams]);
+  }, [searchParams])
 
   const signInWithEmail = async () => {
-    if (!email || !password) return;
+    if (!email || !password) return
     try {
-      setLoginError(undefined);
+      setLoginError(undefined)
       const { error } = await supabase.auth.signInWithPassword({
         email,
-        password,
-      });
-      if (error) throw error;
-      navigate(redirectUrl || "/");
+        password
+      })
+      if (error) throw error
+      navigate(redirectUrl || '/')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.message) {
-        setLoginError(error.message);
+        setLoginError(error.message)
       }
       console.error(
-        "Error logging in:",
+        'Error logging in:',
         error.error_description || error.message
-      );
+      )
     }
-  };
+  }
 
-  const signInWithOAuth = async (provider: "github" | "google") => {
+  const signInWithOAuth = async (provider: 'github' | 'google') => {
     try {
-      setLoginError(undefined);
+      setLoginError(undefined)
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
           redirectTo: redirectUrl
             ? `${window.location.origin}${redirectUrl}`
-            : `${window.location.origin}`,
-        },
-      });
-      if (error) throw error;
+            : `${window.location.origin}`
+        }
+      })
+      if (error) throw error
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.message) {
-        setLoginError(error.message);
+        setLoginError(error.message)
       }
       console.error(
-        "Error logging in:",
+        'Error logging in:',
         error.error_description || error.message
-      );
+      )
     }
-  };
+  }
 
   return (
-    <div className="flex min-h-screen h-full flex-1">
+    <div className="flex h-full min-h-screen flex-1">
       <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
@@ -84,7 +84,7 @@ export default function SignIn() {
           <div className="mt-10">
             <div className="grid grid-cols-2 gap-4">
               <button
-                onClick={() => signInWithOAuth("google")}
+                onClick={() => signInWithOAuth('google')}
                 className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
               >
                 <svg className="h-5 w-5" aria-hidden="true" viewBox="0 0 24 24">
@@ -109,7 +109,7 @@ export default function SignIn() {
               </button>
 
               <button
-                onClick={() => signInWithOAuth("github")}
+                onClick={() => signInWithOAuth('github')}
                 className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
               >
                 <svg
@@ -147,8 +147,8 @@ export default function SignIn() {
             <div className="mt-6">
               <form
                 onSubmit={(e) => {
-                  e.preventDefault();
-                  signInWithEmail();
+                  e.preventDefault()
+                  signInWithEmail()
                 }}
                 className="space-y-6"
               >
@@ -214,7 +214,7 @@ export default function SignIn() {
             </div>
 
             <p className="mt-8 text-sm leading-6 text-gray-500">
-              Don't have an account?{" "}
+              Don't have an account?{' '}
               <Link
                 to="/register"
                 className="font-semibold text-indigo-600 hover:text-indigo-500"
@@ -256,5 +256,5 @@ export default function SignIn() {
         />
       </div>
     </div>
-  );
+  )
 }

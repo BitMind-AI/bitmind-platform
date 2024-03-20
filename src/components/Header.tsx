@@ -1,37 +1,37 @@
-import { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Fragment } from 'react'
+import { Link } from 'react-router-dom'
 
-import { supabase } from "../lib/supabase";
-import useSupabase from "../hooks/useSupabase";
+import { supabase } from '../lib/supabase'
+import useSupabase from '../hooks/useSupabase'
 
-import { Menu, Transition } from "@headlessui/react";
+import { Menu, Transition } from '@headlessui/react'
 
-import Logo from "./Logo";
-import ThemeToggle from "./ThemeToggle";
+import Logo from './Logo'
+import ThemeToggle from './ThemeToggle'
 
-import clsx from "clsx";
+import clsx from 'clsx'
 
-const userNavigation = [{ name: "Account", href: "/account" }];
+const userNavigation = [{ name: 'Account', href: '/account' }]
 
 export default function Header({
   theme,
-  setTheme,
+  setTheme
 }: {
-  theme: string;
-  setTheme: (theme: string) => void;
+  theme: string
+  setTheme: (theme: string) => void
 }) {
-  const { profile } = useSupabase();
+  const { profile } = useSupabase()
 
   const handleSignOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
 
-      window.location.reload();
+      window.location.reload()
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   return (
     <div className="sticky top-0 z-10 bg-white bg-opacity-75 shadow backdrop-blur backdrop-filter dark:bg-neutral-800 dark:shadow-gray-500">
@@ -82,8 +82,8 @@ export default function Header({
                         <Link
                           to={item.href}
                           className={clsx(
-                            "block px-4 py-2 text-sm text-gray-700",
-                            active && "bg-gray-100"
+                            'block px-4 py-2 text-sm text-gray-700',
+                            active && 'bg-gray-100'
                           )}
                         >
                           {item.name}
@@ -95,8 +95,8 @@ export default function Header({
                     {({ active }) => (
                       <button
                         className={clsx(
-                          "block w-full px-4 py-2 text-left text-sm text-red-700",
-                          active && "bg-gray-100"
+                          'block w-full px-4 py-2 text-left text-sm text-red-700',
+                          active && 'bg-gray-100'
                         )}
                         onClick={handleSignOut}
                       >
@@ -111,5 +111,5 @@ export default function Header({
         </div>
       </div>
     </div>
-  );
+  )
 }

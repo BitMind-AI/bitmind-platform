@@ -1,46 +1,46 @@
-import { useState, useEffect } from "react";
-import { supabase } from "../../lib/supabase";
-import { Link, useSearchParams } from "react-router-dom";
+import { useState, useEffect } from 'react'
+import { supabase } from '../../lib/supabase'
+import { Link, useSearchParams } from 'react-router-dom'
 
-import Logo from "../../components/Logo";
+import Logo from '../../components/Logo'
 import {
   CheckCircleIcon,
   EyeIcon,
-  EyeSlashIcon,
-} from "@heroicons/react/20/solid";
-import clsx from "clsx";
+  EyeSlashIcon
+} from '@heroicons/react/20/solid'
+import clsx from 'clsx'
 
 export default function Register() {
-  const [redirectUrl, setRedirectUrl] = useState<string>();
-  const [registerError, setRegisterError] = useState<string>();
+  const [redirectUrl, setRedirectUrl] = useState<string>()
+  const [registerError, setRegisterError] = useState<string>()
 
-  const [loading, setLoading] = useState(false);
-  const [hidePassword, setHidePassword] = useState(true);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmationEmailSent, setConfirmationEmailSent] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const [hidePassword, setHidePassword] = useState(true)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmationEmailSent, setConfirmationEmailSent] = useState(false)
 
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams()
 
   useEffect(() => {
     // Check to see if we have a redirect URL
-    const redirect = searchParams.get("redirect");
+    const redirect = searchParams.get('redirect')
     if (redirect) {
-      setRedirectUrl(redirect);
+      setRedirectUrl(redirect)
     }
-  }, [searchParams]);
+  }, [searchParams])
 
   const handleRegister = async () => {
     try {
-      setLoading(true);
-      setRegisterError(undefined);
+      setLoading(true)
+      setRegisterError(undefined)
 
       if (name.length < 3)
-        throw new Error("Account name should be at least 3 characters");
+        throw new Error('Account name should be at least 3 characters')
 
       if (password.length < 6)
-        throw new Error("Password should be at least 6 characters");
+        throw new Error('Password should be at least 6 characters')
 
       const { error } = await supabase.auth.signUp({
         email,
@@ -48,53 +48,53 @@ export default function Register() {
         options: {
           emailRedirectTo: window.location.origin,
           data: {
-            full_name: name,
-          },
-        },
-      });
-      if (error) throw error;
-      setConfirmationEmailSent(true);
+            full_name: name
+          }
+        }
+      })
+      if (error) throw error
+      setConfirmationEmailSent(true)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.message) {
-        setRegisterError(error.message);
+        setRegisterError(error.message)
       }
       console.error(
-        "Error registering account:",
+        'Error registering account:',
         error.error_description || error.message
-      );
+      )
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  const signInWithOAuth = async (provider: "github" | "google") => {
+  const signInWithOAuth = async (provider: 'github' | 'google') => {
     try {
-      setRegisterError(undefined);
+      setRegisterError(undefined)
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
           redirectTo: redirectUrl
             ? `${window.location.origin}${redirectUrl}`
-            : `${window.location.origin}`,
-        },
-      });
-      if (error) throw error;
+            : `${window.location.origin}`
+        }
+      })
+      if (error) throw error
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.message) {
-        setRegisterError(error.message);
+        setRegisterError(error.message)
       }
       console.error(
-        "Error logging in:",
+        'Error logging in:',
         error.error_description || error.message
-      );
+      )
     }
-  };
+  }
 
   return (
     <>
-      <div className="flex min-h-full items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex min-h-full items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           {!confirmationEmailSent ? (
             <>
@@ -113,7 +113,7 @@ export default function Register() {
               <div className="mt-10">
                 <div className="grid grid-cols-2 gap-4">
                   <button
-                    onClick={() => signInWithOAuth("google")}
+                    onClick={() => signInWithOAuth('google')}
                     className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
                   >
                     <svg
@@ -144,7 +144,7 @@ export default function Register() {
                   </button>
 
                   <button
-                    onClick={() => signInWithOAuth("github")}
+                    onClick={() => signInWithOAuth('github')}
                     className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
                   >
                     <svg
@@ -183,8 +183,8 @@ export default function Register() {
               </div>
               <form
                 onSubmit={(e) => {
-                  e.preventDefault();
-                  handleRegister();
+                  e.preventDefault()
+                  handleRegister()
                 }}
               >
                 <div className="space-y-12">
@@ -245,7 +245,7 @@ export default function Register() {
                           <input
                             id="new-password"
                             name="password"
-                            type={hidePassword ? "password" : "text"}
+                            type={hidePassword ? 'password' : 'text'}
                             autoComplete="new-password"
                             required
                             className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -278,10 +278,10 @@ export default function Register() {
                     <button
                       type="submit"
                       className={clsx(
-                        "group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white",
+                        'group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white',
                         loading
-                          ? "opacity-50"
-                          : "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                          ? 'opacity-50'
+                          : 'hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                       )}
                       disabled={loading}
                     >
@@ -333,5 +333,5 @@ export default function Register() {
         </div>
       </div>
     </>
-  );
+  )
 }

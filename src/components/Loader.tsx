@@ -14,5 +14,5 @@ export default function Loader() {
         </svg>
       </div>
     </div>
-  );
+  )
 }

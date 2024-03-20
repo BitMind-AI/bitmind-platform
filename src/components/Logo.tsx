@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
 export default function Logo() {
   return (
     <Link to="/" className="flex flex-shrink-0 items-center">
       <img
-        className="h-8 w-auto hidden dark:block"
+        className="hidden h-8 w-auto dark:block"
         src="/logo.png"
         alt="BitMind"
       />
@@ -14,5 +14,5 @@ export default function Logo() {
         alt="BitMind"
       />
     </Link>
-  );
+  )
 }
