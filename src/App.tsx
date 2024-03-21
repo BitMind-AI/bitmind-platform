@@ -67,9 +67,9 @@ function App() {
       } as { [key: string]: string }
       const routeName = pathname.split('/')[1]
       const title = routeTitles[routeName] || capitalizeFirstLetter(routeName)
-      document.title = `BitMind | ${title}`
+      document.title = `BUIDL AI | ${title}`
     } else {
-      document.title = `BitMind`
+      document.title = `BUIDL AI`
     }
   }, [pathname])
 
