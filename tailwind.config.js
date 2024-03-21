@@ -6,7 +6,6 @@ export default {
     extend: {},
   },
   plugins: [
-    "prettier-plugin-tailwindcss",
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
   ],

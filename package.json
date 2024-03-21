@@ -19,8 +19,8 @@
     "react": "^18.2.0",
     "react-ace": "^10.1.0",
     "react-dom": "^18.2.0",
-    "react-py": "^1.10.7",
-    "react-router-dom": "^6.22.1"
+    "react-router-dom": "^6.22.1",
+    "recharts": "^2.12.3"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",

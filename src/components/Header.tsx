@@ -1,43 +1,68 @@
-import { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Fragment } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 
-import { supabase } from "../lib/supabase";
-import useSupabase from "../hooks/useSupabase";
+import { supabase } from '../lib/supabase'
+import useSupabase from '../hooks/useSupabase'
 
-import { Menu, Transition } from "@headlessui/react";
+import { Menu, Transition } from '@headlessui/react'
 
-import Logo from "./Logo";
-import ThemeToggle from "./ThemeToggle";
+import Logo from './Logo'
+import ThemeToggle from './ThemeToggle'
 
-import clsx from "clsx";
+import clsx from 'clsx'
 
-const userNavigation = [{ name: "Account", href: "/account" }];
+const navigation = [
+  { name: 'Home', href: '/' },
+  { name: 'Performance', href: '/performance' },
+  { name: 'Earnings', href: '/earnings' }
+]
+
+const userNavigation = [{ name: 'Account', href: '/account' }]
 
 export default function Header({
   theme,
-  setTheme,
+  setTheme
 }: {
-  theme: string;
-  setTheme: (theme: string) => void;
+  theme: string
+  setTheme: (theme: string) => void
 }) {
-  const { profile } = useSupabase();
+  const { profile } = useSupabase()
+
+  const location = useLocation()
 
   const handleSignOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
 
-      window.location.reload();
+      window.location.reload()
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   return (
     <div className="sticky top-0 z-10 bg-white bg-opacity-75 shadow backdrop-blur backdrop-filter dark:bg-neutral-800 dark:shadow-gray-500">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between">
           <Logo />
+
+          <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={clsx(
+                  'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium',
+                  location.pathname === item.href
+                    ? 'border-indigo-500 text-gray-900 dark:text-white'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-gray-300'
+                )}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
 
           <div className="flex flex-1 items-center justify-end gap-x-8">
             <ThemeToggle theme={theme} setTheme={setTheme} />
@@ -82,8 +107,8 @@ export default function Header({
                         <Link
                           to={item.href}
                           className={clsx(
-                            "block px-4 py-2 text-sm text-gray-700",
-                            active && "bg-gray-100"
+                            'block px-4 py-2 text-sm text-gray-700',
+                            active && 'bg-gray-100'
                           )}
                         >
                           {item.name}
@@ -95,8 +120,8 @@ export default function Header({
                     {({ active }) => (
                       <button
                         className={clsx(
-                          "block w-full px-4 py-2 text-left text-sm text-red-700",
-                          active && "bg-gray-100"
+                          'block w-full px-4 py-2 text-left text-sm text-red-700',
+                          active && 'bg-gray-100'
                         )}
                         onClick={handleSignOut}
                       >
@@ -107,9 +132,16 @@ export default function Header({
                 </Menu.Items>
               </Transition>
             </Menu>
+
+            <Link
+              to="/compute"
+              className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              New Workspace
+            </Link>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
