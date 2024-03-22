@@ -29,7 +29,7 @@ const features = [
 export default function Home() {
   return (
     <main className="flex h-full flex-1 flex-col bg-white dark:bg-neutral-800">
-      <div className="relative isolate overflow-hidden bg-gray-100 dark:bg-gray-800">
+      <div className="relative isolate overflow-hidden bg-gray-100">
         <img
           className="absolute inset-0 -z-10 h-full w-full object-cover"
           src="https://images.unsplash.com/photo-1656510922456-e9018507288f?q=80&w=2680&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"

@@ -41,7 +41,7 @@ export type Snippet = {
   user_id: string
 }
 
-function App() {
+export default function App() {
   const [loading, setLoading] = useState(true)
   const [session, setSession] = useState<Session | null>(null)
   const [theme, setTheme] = useState(localStorage.theme || 'light')
@@ -173,5 +173,3 @@ function App() {
     </SupabaseProvider>
   )
 }
-
-export default App

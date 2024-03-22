@@ -1,26 +1,23 @@
-import { Fragment } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import {
-  ExclamationTriangleIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Fragment } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-function _Dialog({
+export default function _Dialog({
   show,
   onClose,
   title,
   description,
   onConfirm,
   confirmText,
-  cancelText,
+  cancelText
 }: React.PropsWithChildren<{
-  show: boolean;
-  onClose: () => void;
-  title: string;
-  description: string;
-  onConfirm: () => void;
-  confirmText: string;
-  cancelText: string;
+  show: boolean
+  onClose: () => void
+  title: string
+  description: string
+  onConfirm: () => void
+  confirmText: string
+  cancelText: string
 }>) {
   return (
     <Transition.Root show={show} as={Fragment}>
@@ -102,7 +99,5 @@ function _Dialog({
         </div>
       </Dialog>
     </Transition.Root>
-  );
+  )
 }
-
-export default _Dialog;

@@ -80,8 +80,8 @@ export default function Performance() {
           </div>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-y-16 lg:max-w-none lg:grid-cols-5 lg:gap-x-8">
-          <div className="col-span-2 border border-gray-200 shadow-xl dark:border-gray-700 sm:rounded-xl">
+        <div className="mt-8 grid grid-cols-1 gap-y-16 lg:max-w-none lg:grid-cols-2 lg:gap-x-8">
+          <div className="col-span-1 border border-gray-200 shadow-xl dark:border-gray-700 sm:rounded-xl">
             <div className="p-8">
               <div className="relative flex items-center space-x-4 rounded-xl border border-gray-300 px-4 py-4 shadow">
                 <div className="min-w-0 flex-auto">
@@ -99,14 +99,14 @@ export default function Performance() {
                     </h2>
                   </div>
                   <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-500 dark:text-gray-400">
-                    <p className="truncate">model_v5_1.h5</p>
+                    <p className="truncate">Subnet 8</p>
                     <svg
                       viewBox="0 0 2 2"
                       className="h-0.5 w-0.5 flex-none fill-gray-300"
                     >
                       <circle cx={1} cy={1} r={1} />
                     </svg>
-                    <p className="whitespace-nowrap">2 days ago</p>
+                    <p className="whitespace-nowrap">Last updated 2 days ago</p>
                   </div>
                 </div>
                 <div className="flex-none rounded-full bg-indigo-400/10 px-2 py-1 text-xs font-medium text-indigo-400 ring-1 ring-inset ring-indigo-400/30">
@@ -205,8 +205,8 @@ export default function Performance() {
             </div>
           </div>
 
-          <div className="col-span-3 border border-gray-200 shadow-xl dark:border-gray-700 sm:rounded-xl">
-            <ResponsiveContainer width="100%" height={600}>
+          <div className="col-span-1 border border-gray-200 shadow-xl dark:border-gray-700 sm:rounded-xl">
+            <ResponsiveContainer width="100%" height={400}>
               <LineChart
                 data={chartData}
                 margin={{

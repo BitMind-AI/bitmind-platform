@@ -172,7 +172,6 @@ export default function Review() {
             </div>
           </div>
 
-          {/* estimated charges */}
           <div className="mt-12">
             <h3 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
               Estimated charges
