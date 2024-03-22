@@ -18,7 +18,7 @@ npm run dev
 
 Open the URL shown in the terminal to view the site.
 
-**Note:** The local Python interpreter doesn't work when running the development server. You will need to build the app first and preview the production build to see the Python interpreter in action.
+**Note:** The local Python interpreter doesn't work when running the development server. You will need to build the app first and preview the production build to see the Python interpreter in action. 
 
 Building the app.
 
