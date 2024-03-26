@@ -9,7 +9,7 @@ const features = [
   {
     name: 'Zero-config workspace',
     description:
-      'Get started quickly with no configuration required. BUIDL AI works out of the box.',
+      'Get started quickly with no configuration required. Bitmind works out of the box.',
     icon: BoltIcon
   },
   {
@@ -37,7 +37,7 @@ export default function Home() {
         />
         <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
           <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Welcome to BUIDL AI
+            Welcome to Bitmind
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-center text-xl text-gray-500">
             Get started by creating a new workspace.
@@ -62,7 +62,7 @@ export default function Home() {
             Get rewarded for your work
           </h2>
           <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
-            BUIDL AI is a platform for developing and deploying machine learning
+            Bitmind is a platform for developing and deploying machine learning
             models. You can track your model performance and deploy your models
             to incentive networks. You can also cash out your rewards to your
             bank account or cryptocurrency wallet.

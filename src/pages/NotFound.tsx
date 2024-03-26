@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 export default function NotFound() {
   useEffect(() => {
-    document.title = 'BUIDL AI | 404'
+    document.title = 'Bitmind | 404'
   }, [])
 
   return (

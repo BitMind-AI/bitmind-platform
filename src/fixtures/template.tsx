@@ -2,9 +2,9 @@ export const templateOptions = [
   {
     id: '1',
     icon: '/template-icons/bitmind.png',
-    name: 'BUIDL AI Toolkit',
+    name: 'Bitmind Toolkit',
     description:
-      'The BUIDL AI toolkit provides all the AI tools and integrations to start building and deploy models to monetize.',
+      'The Bitmind toolkit provides all the AI tools and integrations to start building and deploy models to monetize.',
     recommended: true
   },
   {
