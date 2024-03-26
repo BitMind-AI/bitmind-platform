@@ -6,12 +6,12 @@ export default function Logo() {
       <img
         className="hidden h-8 w-auto dark:block"
         src="/logo.png"
-        alt="Bitmind"
+        alt="BitMind"
       />
       <img
         className="h-8 w-auto dark:hidden"
         src="/logo-dark.png"
-        alt="Bitmind"
+        alt="BitMind"
       />
     </Link>
   )

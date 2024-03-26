@@ -1,19 +1,40 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+
+import { fetchWorkspaces } from '../../api/workspaces'
+
 import { supabase } from '../../lib/supabase'
 import useSupabase from '../../hooks/useSupabase'
 import useNotifications from '../../hooks/useNotifications'
 
 import Contact from '../../components/Contact'
 
-import { XMarkIcon } from '@heroicons/react/20/solid'
+import {
+  ChevronRightIcon,
+  InformationCircleIcon,
+  XMarkIcon
+} from '@heroicons/react/20/solid'
 import Loader from '../../components/Loader'
 import Dialog from '../../components/Dialog'
 import DialogEmpty from '../../components/DialogEmpty'
 
+import clsx from 'clsx'
+
+const statuses = {
+  stopped: 'text-gray-500 bg-gray-100/10',
+  running: 'text-green-400 bg-green-400/10',
+  error: 'text-rose-400 bg-rose-400/10'
+}
+
 export default function Account() {
   const [supportModalOpen, setSupportModalOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+
+  const { data: workspaces, isLoading } = useQuery({
+    queryKey: ['workspaces'],
+    queryFn: fetchWorkspaces
+  })
 
   const navigate = useNavigate()
   const { user, profile } = useSupabase()
@@ -36,7 +57,7 @@ export default function Account() {
     }
   }
 
-  if (!user || !profile) {
+  if (isLoading || !user || !profile) {
     return (
       <div className="flex h-screen items-center justify-center bg-white dark:bg-neutral-800">
         <Loader />
@@ -101,6 +122,100 @@ export default function Account() {
           <div className="mt-8">
             <div className="mt-8 max-w-2xl">
               <h2 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                Workspaces
+              </h2>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-200">
+                View and manage your workspaces.
+              </p>
+
+              <ul
+                role="list"
+                className="divide-y divide-gray-100 dark:divide-white/5"
+              >
+                {workspaces && workspaces.count > 0 ? (
+                  workspaces.workspaces.map(
+                    ({
+                      id,
+                      name,
+                      template_display_name,
+                      latest_build,
+                      last_used_at
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    }: any) => (
+                      <li
+                        key={id}
+                        className="relative flex items-center space-x-4 py-4"
+                      >
+                        <div className="min-w-0 flex-auto">
+                          <div className="flex items-center gap-x-3">
+                            <div
+                              className={clsx(
+                                statuses[
+                                  latest_build.status as keyof typeof statuses
+                                ],
+                                'flex-none rounded-full p-1'
+                              )}
+                            >
+                              <div className="h-2 w-2 rounded-full bg-current" />
+                            </div>
+                            <h2 className="min-w-0 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+                              <Link
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                to={`/editor?subdomain=${latest_build.resources.find((r: any) => r.type === 'docker_container')?.agents[0]?.apps.find((a: any) => a.slug === 'vscode-web')?.subdomain_name}`}
+                                className="flex gap-x-2"
+                              >
+                                <span className="truncate">{name}</span>
+                                <span className="text-gray-400">/</span>
+                                <span className="whitespace-nowrap">
+                                  {template_display_name}
+                                </span>
+                                <span className="absolute inset-0" />
+                              </Link>
+                            </h2>
+                          </div>
+                          <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
+                            <p className="truncate">
+                              {latest_build.initiator_name}
+                            </p>
+                            <svg
+                              viewBox="0 0 2 2"
+                              className="h-0.5 w-0.5 flex-none fill-gray-300"
+                            >
+                              <circle cx={1} cy={1} r={1} />
+                            </svg>
+                            <p className="whitespace-nowrap">
+                              Last used{' '}
+                              <time dateTime={last_used_at}>
+                                {new Date(last_used_at).toLocaleDateString()}
+                              </time>
+                            </p>
+                          </div>
+                        </div>
+                        <ChevronRightIcon
+                          className="h-5 w-5 flex-none text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </li>
+                    )
+                  )
+                ) : (
+                  <div className="mt-4 flex items-center gap-x-2">
+                    <InformationCircleIcon
+                      className="h-4 w-4 text-gray-400 dark:text-gray-300"
+                      aria-hidden="true"
+                    />
+                    <p className="text-sm text-gray-500 dark:text-gray-300">
+                      No workspaces found.
+                    </p>
+                  </div>
+                )}
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <div className="mt-8 max-w-2xl">
+              <h2 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
                 Support
               </h2>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-200">
@@ -119,7 +234,7 @@ export default function Account() {
           <div className="mt-8">
             <div className="mt-8 max-w-2xl">
               <h2 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                Delete account
+                Account deletion
               </h2>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-200">
                 Once you delete your account, there is no going back.
@@ -142,9 +257,7 @@ export default function Account() {
         show={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         title="Delete account"
-        description="Are you sure you want to delete your account? All of your
-        snippets will be permanently removed. This action cannot be
-        undone."
+        description="Are you sure you want to delete your account? All of your workspaces will be permanently removed. This action cannot be undone."
         onConfirm={handleDeleteAccount}
         confirmText="I'm sure, delete my account"
         cancelText="Cancel"

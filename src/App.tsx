@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
 import { supabase } from './lib/supabase'
 import { Session } from '@supabase/supabase-js'
 
@@ -48,6 +50,8 @@ export default function App() {
 
   const { pathname } = useLocation()
 
+  const queryClient = new QueryClient()
+
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     supabase.auth.getSession().then(({ data: { session } }: any) => {
@@ -71,9 +75,9 @@ export default function App() {
       } as { [key: string]: string }
       const routeName = pathname.split('/')[1]
       const title = routeTitles[routeName] || capitalizeFirstLetter(routeName)
-      document.title = `Bitmind | ${title}`
+      document.title = `BitMind | ${title}`
     } else {
-      document.title = `Bitmind`
+      document.title = `BitMind`
     }
   }, [pathname])
 
@@ -90,90 +94,94 @@ export default function App() {
   if (loading) return <Loader />
 
   return (
-    <SupabaseProvider session={session}>
-      <NotificationsProvider>
-        <>
-          <div className="h-full">
-            <Routes>
-              <Route element={<AppLayout theme={theme} setTheme={setTheme} />}>
+    <QueryClientProvider client={queryClient}>
+      <SupabaseProvider session={session}>
+        <NotificationsProvider>
+          <>
+            <div className="h-full">
+              <Routes>
                 <Route
-                  path="/"
-                  element={
-                    <ProtectedRoute>
-                      <Home />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="compute"
-                  element={
-                    <ProtectedRoute>
-                      <Compute />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="template"
-                  element={
-                    <ProtectedRoute>
-                      <Template />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="review"
-                  element={
-                    <ProtectedRoute>
-                      <Review />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="editor"
-                  element={
-                    <ProtectedRoute>
-                      <Editor theme={theme} />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="performance"
-                  element={
-                    <ProtectedRoute>
-                      <Performance />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="earnings"
-                  element={
-                    <ProtectedRoute>
-                      <Earnings />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="account"
-                  element={
-                    <ProtectedRoute>
-                      <Account />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="terms" element={<Terms />} />
-                <Route path="privacy" element={<Privacy />} />
-                <Route path="support" element={<Support />} />
-              </Route>
-              <Route path="signin" element={<SignIn />} />
-              <Route path="register" element={<Register />} />
-              <Route path="forgot-password" element={<ForgotPassword />} />
-              <Route path="error" element={<Error />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
-          <Notifications />
-        </>
-      </NotificationsProvider>
-    </SupabaseProvider>
+                  element={<AppLayout theme={theme} setTheme={setTheme} />}
+                >
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <Home />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="compute"
+                    element={
+                      <ProtectedRoute>
+                        <Compute />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="template"
+                    element={
+                      <ProtectedRoute>
+                        <Template />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="review"
+                    element={
+                      <ProtectedRoute>
+                        <Review />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="editor"
+                    element={
+                      <ProtectedRoute>
+                        <Editor theme={theme} />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="performance"
+                    element={
+                      <ProtectedRoute>
+                        <Performance />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="earnings"
+                    element={
+                      <ProtectedRoute>
+                        <Earnings />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="account"
+                    element={
+                      <ProtectedRoute>
+                        <Account />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="terms" element={<Terms />} />
+                  <Route path="privacy" element={<Privacy />} />
+                  <Route path="support" element={<Support />} />
+                </Route>
+                <Route path="signin" element={<SignIn />} />
+                <Route path="register" element={<Register />} />
+                <Route path="forgot-password" element={<ForgotPassword />} />
+                <Route path="error" element={<Error />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+            <Notifications />
+          </>
+        </NotificationsProvider>
+      </SupabaseProvider>
+    </QueryClientProvider>
   )
 }

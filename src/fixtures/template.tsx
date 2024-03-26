@@ -2,9 +2,9 @@ export const templateOptions = [
   {
     id: '1',
     icon: '/template-icons/bitmind.png',
-    name: 'Bitmind Toolkit',
+    name: 'BitMind Toolkit',
     description:
-      'The Bitmind toolkit provides all the AI tools and integrations to start building and deploy models to monetize.',
+      'The BitMind toolkit provides all the AI tools and integrations to start building and deploy models to monetize.',
     recommended: true
   },
   {

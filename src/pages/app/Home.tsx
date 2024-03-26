@@ -9,7 +9,7 @@ const features = [
   {
     name: 'Zero-config workspace',
     description:
-      'Get started quickly with no configuration required. Bitmind works out of the box.',
+      'Get started quickly with no configuration required. BitMind works out of the box.',
     icon: BoltIcon
   },
   {
@@ -37,10 +37,11 @@ export default function Home() {
         />
         <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
           <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Welcome to Bitmind
+            Welcome to BitMind
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-center text-xl text-gray-500">
-            Get started by creating a new workspace.
+            Get started by creating a new workspace or pick up where you left
+            off.
           </p>
 
           <div className="mx-auto mt-12 max-w-lg lg:max-w-3xl">
@@ -49,7 +50,13 @@ export default function Home() {
                 to="/compute"
                 className="rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700"
               >
-                Create New Workspace
+                New Workspace
+              </Link>
+              <Link
+                to="/account"
+                className="ml-4 rounded-md border border-transparent bg-gray-200 px-8 py-3 text-base font-medium text-gray-800 hover:bg-gray-300 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              >
+                Existing Workspaces &#8599;
               </Link>
             </div>
           </div>
@@ -62,7 +69,7 @@ export default function Home() {
             Get rewarded for your work
           </h2>
           <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
-            Bitmind is a platform for developing and deploying machine learning
+            BitMind is a platform for developing and deploying machine learning
             models. You can track your model performance and deploy your models
             to incentive networks. You can also cash out your rewards to your
             bank account or cryptocurrency wallet.
