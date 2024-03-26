@@ -52,6 +52,11 @@ npm run proxy
 
 ### Overview
 
+Additional documentation can be found in the `docs` directory:
+
+- [Supabase Docs](docs/supabase.md)
+- [Coder Docs](docs/coder.md)
+
 The BitMind platform consists of several components working together to provide a seamless experience for users to access computational platforms, manage workspaces, and interact with Bittensor. Below is an overview of the project setup:
 
 1. **BitMind Platform: React SPA with Supabase**
