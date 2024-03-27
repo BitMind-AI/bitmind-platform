@@ -49,4 +49,4 @@ A new session token is then generated for the user and stored in the `profiles` 
 }
 ```
 
-**TODO**: Check when a `lifetime` of `0` expires.
+**TODO**: A `lifetime` of `0` defaults to 30 days.

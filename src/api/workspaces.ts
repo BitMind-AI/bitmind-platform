@@ -2,7 +2,13 @@ import axios from '../utils/axios'
 
 export const fetchWorkspaces = async () => {
   try {
-    const res = await axios.get('/workspaces?owner=me')
+    const coderUser = await axios.get('/users/me')
+    if (!coderUser) {
+      throw new Error('No coder user found')
+    }
+    const username = coderUser.data.username
+
+    const res = await axios.get(`/workspaces?q=owner:${username}`)
     return res.data
   } catch (error) {
     console.error('Error fetching workspaces', error)
@@ -20,10 +26,10 @@ export const createWorkspace = async (data: {
       throw new Error('No coder user found')
     }
     const orgId = coderUser.data.organization_ids[0]
-    const memberId = coderUser.data.id
+    const username = coderUser.data.username
 
     const res = await axios.post(
-      `/organizations/${orgId}/members/${memberId}/workspaces`,
+      `/organizations/${orgId}/members/${username}/workspaces`,
       {
         name: data.name,
         automatic_updates: 'always',

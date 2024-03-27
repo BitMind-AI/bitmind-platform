@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
 import { fetchWorkspaces } from '../../api/workspaces'
@@ -10,22 +10,11 @@ import useNotifications from '../../hooks/useNotifications'
 
 import Contact from '../../components/Contact'
 
-import {
-  ChevronRightIcon,
-  InformationCircleIcon,
-  XMarkIcon
-} from '@heroicons/react/20/solid'
+import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import Loader from '../../components/Loader'
 import Dialog from '../../components/Dialog'
 import DialogEmpty from '../../components/DialogEmpty'
-
-import clsx from 'clsx'
-
-const statuses = {
-  stopped: 'text-gray-500 bg-gray-100/10',
-  running: 'text-green-400 bg-green-400/10',
-  error: 'text-rose-400 bg-rose-400/10'
-}
+import WorkspaceLink from '../../components/WorkspaceLink'
 
 export default function Account() {
   const [supportModalOpen, setSupportModalOpen] = useState(false)
@@ -130,74 +119,16 @@ export default function Account() {
 
               <ul
                 role="list"
-                className="divide-y divide-gray-100 dark:divide-white/5"
+                className="mt-4 divide-y divide-gray-100 rounded-lg border border-gray-100 px-4 dark:divide-white/5 dark:border-white/5"
               >
                 {workspaces && workspaces.count > 0 ? (
-                  workspaces.workspaces.map(
-                    ({
-                      id,
-                      name,
-                      template_display_name,
-                      latest_build,
-                      last_used_at
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    }: any) => (
-                      <li
-                        key={id}
-                        className="relative flex items-center space-x-4 py-4"
-                      >
-                        <div className="min-w-0 flex-auto">
-                          <div className="flex items-center gap-x-3">
-                            <div
-                              className={clsx(
-                                statuses[
-                                  latest_build.status as keyof typeof statuses
-                                ],
-                                'flex-none rounded-full p-1'
-                              )}
-                            >
-                              <div className="h-2 w-2 rounded-full bg-current" />
-                            </div>
-                            <h2 className="min-w-0 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
-                              <Link
-                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                to={`/editor?subdomain=${latest_build.resources.find((r: any) => r.type === 'docker_container')?.agents[0]?.apps.find((a: any) => a.slug === 'vscode-web')?.subdomain_name}`}
-                                className="flex gap-x-2"
-                              >
-                                <span className="truncate">{name}</span>
-                                <span className="text-gray-400">/</span>
-                                <span className="whitespace-nowrap">
-                                  {template_display_name}
-                                </span>
-                                <span className="absolute inset-0" />
-                              </Link>
-                            </h2>
-                          </div>
-                          <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
-                            <p className="truncate">
-                              {latest_build.initiator_name}
-                            </p>
-                            <svg
-                              viewBox="0 0 2 2"
-                              className="h-0.5 w-0.5 flex-none fill-gray-300"
-                            >
-                              <circle cx={1} cy={1} r={1} />
-                            </svg>
-                            <p className="whitespace-nowrap">
-                              Last used{' '}
-                              <time dateTime={last_used_at}>
-                                {new Date(last_used_at).toLocaleDateString()}
-                              </time>
-                            </p>
-                          </div>
-                        </div>
-                        <ChevronRightIcon
-                          className="h-5 w-5 flex-none text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </li>
-                    )
-                  )
+                  workspaces.workspaces.map((workspace: any) => (
+                    <WorkspaceLink
+                      key={workspace.id}
+                      workspace={workspace}
+                      profileName={profile.full_name}
+                    />
+                  ))
                 ) : (
                   <div className="mt-4 flex items-center gap-x-2">
                     <InformationCircleIcon

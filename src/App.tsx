@@ -19,6 +19,7 @@ import Editor from './pages/app/Editor'
 import Performance from './pages/app/Performance'
 import Earnings from './pages/app/Earnings'
 import Account from './pages/app/Account'
+import Admin from './pages/app/Admin'
 
 import SignIn from './pages/auth/SignIn'
 import Register from './pages/auth/Register'
@@ -164,6 +165,14 @@ export default function App() {
                     element={
                       <ProtectedRoute>
                         <Account />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="admin"
+                    element={
+                      <ProtectedRoute>
+                        <Admin />
                       </ProtectedRoute>
                     }
                   />

@@ -1,87 +1,89 @@
-import { useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
-import { supabase } from "../lib/supabase";
+import { useEffect, useState } from 'react'
+import { User } from '@supabase/supabase-js'
+import { supabase } from '../lib/supabase'
 
 type Profile = {
-  id: string;
-  updated_at: string;
-  username: string;
-  full_name: string;
-  avatar_url: string;
-};
+  id: string
+  updated_at: string
+  username: string
+  full_name: string
+  avatar_url: string
+  is_admin: boolean
+}
 
 export default function useSupabase() {
-  const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [user, setUser] = useState<User | null>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
 
   useEffect(() => {
     // Listen for changes in the user session
     const sessionListener = supabase.auth.onAuthStateChange(
       async (_event, session) => {
-        setUser(session?.user ?? null);
+        setUser(session?.user ?? null)
 
         // Fetch the profile if the user is logged in
         if (session?.user) {
           try {
             // Fetch the profile based on the user ID
             const { data, error } = await supabase
-              .from("profiles")
+              .from('profiles')
               .select(
                 `id,
                 updated_at,
                 username,
                 full_name,
-                avatar_url`
+                avatar_url,
+                is_admin`
               )
-              .eq("id", session.user.id)
-              .single();
+              .eq('id', session.user.id)
+              .single()
             if (error) {
-              throw new Error(error.message);
+              throw new Error(error.message)
             }
-            setProfile(data);
+            setProfile(data)
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (error: any) {
-            console.error("Error fetching profile:", error.message);
+            console.error('Error fetching profile:', error.message)
           }
         } else {
-          setProfile(null);
+          setProfile(null)
         }
       }
-    );
+    )
 
     return () => {
-      sessionListener.data.subscription.unsubscribe();
-    };
+      sessionListener.data.subscription.unsubscribe()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (user) {
       const subscription = supabase
-        .channel("any")
+        .channel('any')
         .on(
-          "postgres_changes",
+          'postgres_changes',
           {
-            event: "UPDATE",
-            schema: "public",
-            table: "profiles",
-            filter: `id=eq.${user.id}`,
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'profiles',
+            filter: `id=eq.${user.id}`
           },
           (payload) => {
             setProfile({
               ...profile,
-              ...(payload.new as Profile),
-            });
+              ...(payload.new as Profile)
+            })
           }
         )
-        .subscribe();
+        .subscribe()
 
       return () => {
-        supabase.removeChannel(subscription);
-      };
+        supabase.removeChannel(subscription)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user])
 
-  return { user, profile };
+  return { user, profile }
 }

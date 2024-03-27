@@ -17,8 +17,6 @@ const navigation = [
   { name: 'Earnings', href: '/earnings' }
 ]
 
-const userNavigation = [{ name: 'Account', href: '/account' }]
-
 export default function Header({
   theme,
   setTheme
@@ -37,8 +35,13 @@ export default function Header({
 
       window.location.reload()
     } catch (error) {
-      console.error(error)
+      console.error('Error signing out', error)
     }
+  }
+
+  const userNavigation = [{ name: 'Account', href: '/account' }]
+  if (profile?.is_admin) {
+    userNavigation.push({ name: 'Admin', href: '/admin' })
   }
 
   return (
@@ -123,7 +126,7 @@ export default function Header({
                           'block w-full px-4 py-2 text-left text-sm text-red-700',
                           active && 'bg-gray-100'
                         )}
-                        onClick={handleSignOut}
+                        onClick={() => handleSignOut()}
                       >
                         Sign out
                       </button>
