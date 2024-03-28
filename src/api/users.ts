@@ -18,7 +18,6 @@ export const fetchUsers = async () => {
 
     // Get Coder users
     const res = await axios.get('/users')
-    console.log('res', res.data)
 
     // Match Coder users with profiles
     return data.map((user) => ({

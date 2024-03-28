@@ -130,7 +130,7 @@ export default function Account() {
                     />
                   ))
                 ) : (
-                  <div className="mt-4 flex items-center gap-x-2">
+                  <div className="my-4 flex items-center gap-x-2">
                     <InformationCircleIcon
                       className="h-4 w-4 text-gray-400 dark:text-gray-300"
                       aria-hidden="true"

@@ -49,4 +49,22 @@ A new session token is then generated for the user and stored in the `profiles` 
 }
 ```
 
-**TODO**: A `lifetime` of `0` defaults to 30 days.
+**NOTE:** A `lifetime` of `0` defaults to 30 days.
+
+## Redirect to URI with encrypted API key
+
+[https://coder.com/docs/v2/latest/api/applications#redirect-to-uri-with-encrypted-api-key](https://coder.com/docs/v2/latest/api/applications#redirect-to-uri-with-encrypted-api-key)
+
+Request to redirect to a URI with an encrypted API key. The request must include the following query parameters:
+
+- `redirect_uri`: The URI to redirect to after the API key is encrypted
+
+**NOTE:** The redirect_uri query parameter must be the primary wildcard app hostname, a workspace proxy access URL or a workspace proxy wildcard app hostname.
+
+Returns a response with a `Set-Cookie` header containing the encrypted API key:
+
+```json
+{
+  "Set-Cookie": "coder_signed_app_token=<encrypted_api_key>; Path=/; Expires=<expiry_date>"
+}
+```

@@ -91,7 +91,15 @@ export default function Compute() {
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-neutral-800">
                       {computeOptions.map(
-                        ({ id, name, status, charge, provider, geography }) => (
+                        ({
+                          id,
+                          name,
+                          status,
+                          charge,
+                          provider,
+                          geography,
+                          available
+                        }) => (
                           <tr key={id}>
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-6">
                               {name}
@@ -109,7 +117,7 @@ export default function Compute() {
                               <span
                                 className={clsx(
                                   'inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium ring-1 ring-inset',
-                                  status === 'Available'
+                                  available
                                     ? 'bg-green-50 text-green-700 ring-green-600/20'
                                     : 'bg-red-50 text-red-700 ring-red-600/20'
                                 )}
@@ -122,7 +130,7 @@ export default function Compute() {
                                 to={`/template?computeId=${id}`}
                                 className={clsx(
                                   'inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50',
-                                  status !== 'Available' &&
+                                  !available &&
                                     'cursor-not-allowed opacity-30 hover:bg-white'
                                 )}
                               >

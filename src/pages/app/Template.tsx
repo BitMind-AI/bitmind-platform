@@ -1,8 +1,13 @@
 import { Link, useSearchParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+
+import { fetchTemplates } from '../../api/templates'
 
 import { templateOptions } from '../../fixtures/template'
 
+import Loader from '../../components/Loader'
 import Steps from '../../components/Steps'
+import clsx from 'clsx'
 
 const steps = [
   { id: 'Step 1', name: 'Compute', href: '/compute', status: 'complete' },
@@ -14,6 +19,42 @@ export default function Compute() {
   const [searchParams] = useSearchParams()
 
   const computeId = searchParams.get('computeId')
+
+  const { data: templates, isLoading } = useQuery({
+    queryKey: ['templates'],
+    queryFn: fetchTemplates
+  })
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-white dark:bg-neutral-800">
+        <Loader />
+      </div>
+    )
+  }
+
+  const options = [
+    ...templates.map(
+      ({
+        id,
+        display_name,
+        name
+      }: {
+        id: string
+        display_name: string
+        name: string
+      }) => ({
+        id,
+        icon: '/template-icons/bitmind.png',
+        name: display_name || name || 'Unnamed',
+        description:
+          'The BitMind toolkit provides all the AI tools and integrations to start building and deploy models to monetize.',
+        recommended: true,
+        available: true
+      })
+    ),
+    ...templateOptions
+  ]
 
   return (
     <main className="flex h-full flex-1 flex-col bg-white dark:bg-neutral-800">
@@ -41,11 +82,14 @@ export default function Compute() {
           </div>
 
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {templateOptions.map(
-              ({ id, icon, name, description, recommended }) => (
+            {options.map(
+              ({ id, icon, name, description, recommended, available }) => (
                 <div
                   key={id}
-                  className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+                  className={clsx(
+                    'relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600',
+                    !available && 'cursor-not-allowed opacity-50'
+                  )}
                 >
                   <div className="flex-shrink-0">
                     {icon ? (
@@ -63,25 +107,43 @@ export default function Compute() {
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <Link
-                      to={`/review?computeId=${computeId}&templateId=${id}`}
-                      className="focus:outline-none"
-                    >
-                      <span className="absolute inset-0" aria-hidden="true" />
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">
-                          {name}
+                    {available ? (
+                      <Link
+                        to={`/review?computeId=${computeId}&templateId=${id}`}
+                        className="focus:outline-none"
+                      >
+                        <span className="absolute inset-0" aria-hidden="true" />
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">
+                            {name}
+                          </p>
+                          {recommended ? (
+                            <div className="flex items-center justify-center rounded-full bg-indigo-100 px-2 py-1 text-xs font-medium leading-none text-indigo-800">
+                              Recommended
+                            </div>
+                          ) : null}
+                        </div>
+                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                          {description}
                         </p>
-                        {recommended ? (
-                          <div className="flex items-center justify-center rounded-full bg-indigo-100 px-2 py-1 text-xs font-medium leading-none text-indigo-800">
-                            Recommended
-                          </div>
-                        ) : null}
+                      </Link>
+                    ) : (
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">
+                            {name}
+                          </p>
+                          {recommended ? (
+                            <div className="flex items-center justify-center rounded-full bg-indigo-100 px-2 py-1 text-xs font-medium leading-none text-indigo-800">
+                              Recommended
+                            </div>
+                          ) : null}
+                        </div>
+                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                          {description}
+                        </p>
                       </div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {description}
-                      </p>
-                    </Link>
+                    )}
                   </div>
                 </div>
               )
